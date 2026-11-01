@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agents IA — Motion Lab</title>
+<meta name="description" content="Mode d’emploi pour agents IA : piloter Motion Lab par son interface (sélecteurs réels, parcours, images clés, export, vérifications), FR / EN. Aucune clé API, tout est local.">
+<meta name="theme-color" content="#111111">
+<meta name="author" content="Binks Design">
+<meta property="og:title" content="Agents IA — Motion Lab">
+<meta property="og:description" content="Mode d’emploi pour agents IA : piloter Motion Lab par son interface (sélecteurs réels, parcours, images clés, export, vérifications), FR / EN. Aucune clé API, tout est local.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Cg transform='translate%284 4%29'%3E%3Crect x='3.5' y='6' width='9' height='12' rx='2.2' fill='none' stroke='%23f2f2f0' stroke-width='2'/%3E%3Crect x='11.5' y='6' width='9' height='12' rx='2.2' fill='%23f2f2f0' transform='rotate%2812 16 12%29'/%3E%3Ccircle cx='18.6' cy='5.2' r='2' fill='%23ff5500'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="alternate" type="text/markdown" href="../AGENTS.md" title="Mode d’emploi pour agents IA (Markdown, FR puis EN)">
+<link rel="help" href="../agent/" title="Agents IA">
+<link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt">
+<link rel="stylesheet" href="../assets/site.css">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)document.documentElement.classList.add('anim');</script>
+<script src="../assets/site.js" defer></script>
+</head>
+<!-- Agents IA / AI agents : lisez ../AGENTS.md (Markdown, français puis anglais) ou ../agent/index.html avant d’agir. L’application est ../app.html ; pas d’API JavaScript publique : pilotage par l’interface (#fileIn, #ratios, .tpl[data-id], #exportBtn…). Aucune clé API, tout est calculé dans le navigateur. -->
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<noscript><p style="margin:0;padding:10px 18px;background:#ff5500;color:#0b0b0b;font:600 14px/1.4 sans-serif">Agents IA : le mode d’emploi complet est dans <a href="../AGENTS.md">AGENTS.md</a> (page HTML : <a href="../agent/index.html">agent/</a>). L’application (<a href="../app.html">app.html</a>) a besoin de JavaScript et de WebGL2.</p></noscript>
+<header class="top">
+  <a class="brand" href="../index.html" aria-label="Motion Lab — accueil"><span class="mk"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="6" width="9" height="12" rx="2.2" fill="none" stroke="#f2f2f0" stroke-width="2"/><rect x="11.5" y="6" width="9" height="12" rx="2.2" fill="#f2f2f0" transform="rotate(12 16 12)"/><circle cx="18.6" cy="5.2" r="2" fill="#ff5500"/></svg></span><b>Motion Lab</b></a>
+  <a class="sig" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">by binks design</a>
+  <nav class="nav" aria-label="Navigation principale">
+    <a href="../index.html">Accueil</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../agent/index.html" aria-current="page">Agents IA</a>
+    <a class="cta" href="../app.html">Ouvrir l’app</a>
+  </nav>
+</header>
+<div class="sheet"><main id="contenu">
+  <div class="doc-hero">
+    <div class="plane" aria-hidden="true"></div>
+    <div class="in-w">
+      <p class="kicker"><i aria-hidden="true"></i>Pour Claude Code, Codex et tout agent qui pilote un navigateur</p>
+      <h1 class="doc-h1"><span class="mask"><span>Mode d’emploi</span></span><span class="mask"><span style="--i:1">pour <em>agents IA</em></span></span></h1>
+      <p class="lead">Comment piloter Motion Lab par son interface : importer des visuels, choisir un modèle et un format, régler, animer, exporter et vérifier. Pas d’API publique à inventer, de vrais sélecteurs. Même contenu en Markdown : <a class="lnk" href="../AGENTS.md">AGENTS.md</a>.</p>
+      <div class="meta lang-switch">
+        <a class="tag" href="#fr-intro">Français</a>
+        <a class="tag" href="#en-intro" hreflang="en">English</a>
+        <a class="tag" href="../AGENTS.md" type="text/markdown">AGENTS.md</a>
+        <a class="tag" href="../llms.txt" type="text/plain">llms.txt</a>
+        <a class="tag" href="../docs.html">Documentation (humains)</a>
+      </div>
+    </div>
+  </div>
+  <div class="in-w doc-grid">
+    <details class="toc" open>
+      <summary><span>Sommaire</span><span class="cur"></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <nav class="toc-body" aria-label="Sommaire"><span class="toc-h" lang="fr">Français</span><ol><li><a href="#fr-regle-fondamentale"><span class="n">01</span><span>Règle fondamentale</span></a></li><li><a href="#fr-demarrer"><span class="n">02</span><span>Démarrer</span></a></li><li><a href="#fr-reperes-de-linterface"><span class="n">03</span><span>Repères de l’interface</span></a></li><li><a href="#fr-parcours-pas-a-pas"><span class="n">04</span><span>Parcours pas à pas</span></a></li><li><a href="#fr-images-cles"><span class="n">05</span><span>Images clés</span></a></li><li><a href="#fr-export-et-fichiers"><span class="n">06</span><span>Export et fichiers</span></a></li><li><a href="#fr-etat-persistant"><span class="n">07</span><span>État persistant</span></a></li><li><a href="#fr-verifications-avant-de-rendre-le-travail"><span class="n">08</span><span>Vérifications avant de rendre le travail</span></a></li><li><a href="#fr-limites-et-erreurs"><span class="n">09</span><span>Limites et erreurs</span></a></li></ol><div style="height:18px"></div><span class="toc-h" lang="en">English</span><ol><li><a href="#en-golden-rule"><span class="n">01</span><span>Golden rule</span></a></li><li><a href="#en-getting-started"><span class="n">02</span><span>Getting started</span></a></li><li><a href="#en-interface-hooks"><span class="n">03</span><span>Interface hooks</span></a></li><li><a href="#en-step-by-step"><span class="n">04</span><span>Step by step</span></a></li><li><a href="#en-keyframes"><span class="n">05</span><span>Keyframes</span></a></li><li><a href="#en-export-and-files"><span class="n">06</span><span>Export and files</span></a></li><li><a href="#en-persistent-state"><span class="n">07</span><span>Persistent state</span></a></li><li><a href="#en-checks-before-handing-back"><span class="n">08</span><span>Checks before handing back</span></a></li><li><a href="#en-limits-and-errors"><span class="n">09</span><span>Limits and errors</span></a></li></ol></nav>
+    </details>
+    <article class="prose">
+<section id="fr-intro" lang="fr"><p>Ce document s’adresse aux agents IA (Claude Code, Codex, ou tout agent qui pilote un navigateur via Playwright / CDP). Il explique comment utiliser <strong>Motion Lab</strong> (<code>app.html</code>), l’éditeur de modèles d’animation de Binks Design : mettre des visuels dans des emplacements, choisir un des 258 modèles, régler le format, le style, le fond, les textes et le logo, poser des images clés, puis exporter une vidéo MP4 ou WebM (ou une image PNG).</p>
+<p>Il existe en deux endroits, toujours identiques : <code>AGENTS.md</code> (Markdown, français puis anglais) et la page <code>agent/index.html</code>. Résumé court : <code>llms.txt</code>. Documentation pour les humains : <code>docs.html</code>.</p>
+<p><strong>Important : Motion Lab n’a pas d’API JavaScript publique.</strong> On le pilote par son interface, avec les sélecteurs réels décrits plus bas. N’invente pas de fonction qui n’existe pas.</p></section>
+<section id="fr-regle-fondamentale" lang="fr"><h2><span class="n">01</span><span>Règle fondamentale</span></h2>
+<p>Motion Lab anime les visuels que l’utilisateur fournit. Ce n’est <strong>pas</strong> un générateur d’images, de logos ni de textes de marque.</p>
+<ul>
+<li><strong>N’invente jamais</strong> un logo, une image, une couleur de marque, une police ou un texte de marque (nom, slogan, titre de projet). Ce que l’utilisateur fournit (images, vidéos, logo, textes, couleurs) <strong>fait foi</strong>.</li>
+<li>Ne redessine pas un SVG fourni, ne le retouche pas : importe-le tel quel comme logo.</li>
+<li>Les <strong>visuels d’exemple</strong> et le <strong>logo d’exemple</strong> (Binks Design) chargés par l’app servent à tester : ne les livre jamais comme travail de l’utilisateur. Vide les emplacements (<code>#clearAll</code>) avant d’importer ses fichiers.</li>
+<li>Un titre que tu proposes reste une <strong>suggestion</strong> : fais-le valider avant de l’écrire dans un calque texte. Le texte par défaut d’un nouveau calque (« Nouveau projet ») doit être remplacé ou le calque supprimé.</li>
+<li><strong>Aucune clé API, aucun compte, aucun service en ligne.</strong> L’app n’embarque aucune IA. Ne demande jamais de clé à l’utilisateur.</li>
+<li><strong>Tout est local</strong> : lecture des fichiers, rendu WebGL2 et encodage vidéo se font dans le navigateur. Rien n’est envoyé à un serveur (seules les polices de l’interface sont chargées depuis Google Fonts et Fontshare).</li>
+</ul>
+<p>Après chaque action, <strong>vérifie l’état visible</strong> (classe <code>.on</code> / <code>.active</code>, valeur affichée, emplacement rempli, message <code>#toast</code>). Un clic n’est pas une preuve de réussite.</p></section>
+<section id="fr-demarrer" lang="fr"><h2><span class="n">02</span><span>Démarrer</span></h2>
+<p>Le dépôt est un site statique : <code>index.html</code> (accueil), <code>app.html</code> (l’application, un seul fichier), <code>docs.html</code>, <code>agent/index.html</code>, <code>AGENTS.md</code>, <code>llms.txt</code>, <code>robots.txt</code>, <code>assets/</code>.</p>
+<pre><code class="language-bash">python3 -m http.server 8000
+# puis ouvrir http://127.0.0.1:8000/app.html?fresh
+</code></pre>
+<ul>
+<li><code>?fresh</code> ignore la session mémorisée et repart du modèle par défaut (Flux vitrine, 16:9). Recommandé pour un travail reproductible.</li>
+<li>L’app a besoin de <strong>WebGL2</strong> (rendu) et, pour l’export vidéo image par image, de <strong>WebCodecs</strong> (<code>VideoEncoder</code>). Chromium récent : OK. En headless, lance Chromium avec un rendu WebGL logiciel si besoin (<code>--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader</code>) ; l’export est alors lent.</li>
+<li><strong>Attendre que l’app soit prête</strong> : <code>window.ML_READY === true</code> (posé quand les visuels d’exemple sont chargés).</li>
+<li>À l’ouverture, les <strong>12 premiers emplacements</strong> sont remplis par les visuels d’exemple.</li>
+</ul>
+<h3 id="fr-demarrer-objet-global-window-ml-interne">Objet global <code>window.ML</code> (interne)</h3>
+<p>L’app expose <code>window.ML</code>, un objet <strong>interne</strong> prévu pour ses propres tests (état <code>ML.st</code>, liste <code>ML.TEMPLATES</code>, etc.). Ce n’est pas une API publique ni stable. Utilise-le <strong>en lecture seule</strong> pour vérifier : par exemple <code>ML.st.tpl</code> (modèle courant), <code>ML.st.ratio</code>, <code>ML.st.dur</code>, <code>ML.st.texts</code>, <code>ML.TEMPLATES.map(t =&gt; [t.id, t.name, t.cat])</code>. Fais les modifications par l’interface.</p></section>
+<section id="fr-reperes-de-linterface" lang="fr"><h2><span class="n">03</span><span>Repères de l’interface</span></h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Zone</th>
+<th>Sélecteur</th>
+<th>Rôle</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Import</td>
+<td><code>#fileIn</code></td>
+<td><code>input[type=file]</code> caché, multiple, <code>image/*,video/*</code>. Remplit les emplacements <strong>vides</strong>, puis ajoute à la suite.</td>
+</tr>
+<tr>
+<td>Import</td>
+<td><code>#mDrop</code></td>
+<td>Zone « Importe tes images ou vidéos » (ouvre le sélecteur).</td>
+</tr>
+<tr>
+<td>Médias</td>
+<td><code>#clearAll</code></td>
+<td>« Tout vider » : vide tous les emplacements.</td>
+</tr>
+<tr>
+<td>Médias</td>
+<td><code>#demoBtn</code></td>
+<td>« Exemples » : remet les visuels d’exemple.</td>
+</tr>
+<tr>
+<td>Médias</td>
+<td><code>#slots .slot[data-i="N"]</code></td>
+<td>Emplacement N (0 = premier). <code>.empty</code> = vide, <code>.off</code> = au-delà du nombre d’images utilisées.</td>
+</tr>
+<tr>
+<td>Médias</td>
+<td><code>.slot [data-a="crop"]</code>, <code>[data-a="rep"]</code>, <code>[data-a="clr"]</code></td>
+<td>Recadrer, Remplacer (ouvre <code>#oneIn</code>), Vider.</td>
+</tr>
+<tr>
+<td>Médias</td>
+<td><code>#slotMinus</code>, <code>#slotPlus</code></td>
+<td>Nombre d’images utilisées par le modèle (dans sa plage).</td>
+</tr>
+<tr>
+<td>Modèles</td>
+<td><code>#tplSearch</code></td>
+<td>Recherche par nom de modèle ou de famille.</td>
+</tr>
+<tr>
+<td>Modèles</td>
+<td><code>#lib .tpl[data-id="&lt;id&gt;"]</code></td>
+<td>Bouton d’un modèle ; <code>.on</code> = sélectionné.</td>
+</tr>
+<tr>
+<td>Format</td>
+<td><code>#ratios [data-r="16:9"]</code></td>
+<td><code>16:9</code>, <code>4:3</code>, <code>1:1</code>, <code>4:5</code>, <code>3:4</code>, <code>9:16</code> ; <code>.active</code> = courant.</td>
+</tr>
+<tr>
+<td>Onglets</td>
+<td><code>.tab[data-tab="media"]</code>, <code>"style"</code>, <code>"text"</code></td>
+<td>Médias, Style, Texte.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>#pane-style input.rg[data-p="tp.&lt;modèle&gt;.&lt;réglage&gt;"]</code></td>
+<td>Curseur d’un réglage du modèle.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>#pane-style [data-sel][data-v]</code>, <code>select[data-selp]</code>, <code>[data-tg]</code></td>
+<td>Choix, listes, interrupteurs du modèle.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>#tpReset</code></td>
+<td>Réinitialiser le modèle.</td>
+</tr>
+<tr>
+<td>Fond</td>
+<td><code>#bgType [data-bt="color"]</code>, <code>"gradient"</code>, <code>"image"</code></td>
+<td>Type de fond.</td>
+</tr>
+<tr>
+<td>Fond</td>
+<td><code>input[type=color][data-p="bg.c1"]</code>, <code>[data-p="bg.c2"]</code>, <code>input.rg[data-p="bg.angle"]</code></td>
+<td>Couleurs et angle.</td>
+</tr>
+<tr>
+<td>Fond</td>
+<td><code>#bgIn</code></td>
+<td><code>input[type=file]</code> de l’image de fond.</td>
+</tr>
+<tr>
+<td>Durée</td>
+<td><code>#durs [data-d="5"]</code> … <code>"30"</code>, <code>#durRg</code></td>
+<td>Durée de la boucle (2 à 40 s).</td>
+</tr>
+<tr>
+<td>Texte</td>
+<td><code>#addText</code></td>
+<td>Ajoute un calque texte (<code>t1</code>, <code>t2</code>…).</td>
+</tr>
+<tr>
+<td>Texte</td>
+<td><code>.layer-card[data-tx="t1"] textarea[data-f="text"]</code></td>
+<td>Contenu du texte.</td>
+</tr>
+<tr>
+<td>Texte</td>
+<td><code>select[data-f="font"]</code>, <code>[data-w="400|500|600"]</code>, <code>[data-al="left|center|right"]</code>, <code>[data-y]</code></td>
+<td>Police, graisse, alignement, position Haut/Centre/Bas.</td>
+</tr>
+<tr>
+<td>Texte</td>
+<td><code>[data-p="tx.t1.size"]</code>, <code>"tx.t1.color"</code>, <code>"tx.t1.opacity"</code></td>
+<td>Taille, couleur, opacité.</td>
+</tr>
+<tr>
+<td>Texte</td>
+<td><code>[data-del="t1"]</code></td>
+<td>Supprimer le calque.</td>
+</tr>
+<tr>
+<td>Logo</td>
+<td><code>#logoPick</code> → <code>#logoIn</code></td>
+<td>Importer un logo (PNG ou SVG).</td>
+</tr>
+<tr>
+<td>Logo</td>
+<td><code>#logoPos [data-x]</code>, <code>[data-p="logo.size"]</code>, <code>[data-p="logo.opacity"]</code>, <code>#logoClr</code></td>
+<td>Position, taille, opacité, retirer.</td>
+</tr>
+<tr>
+<td>Images clés</td>
+<td><code>.kbtn[data-k="&lt;chemin&gt;"]</code></td>
+<td>Losange : pose ou retire une clé à l’instant courant.</td>
+</tr>
+<tr>
+<td>Frise</td>
+<td><code>#playBtn</code>, <code>#scrub</code>, <code>#tTime</code></td>
+<td>Lecture/pause, curseur de temps, temps affiché.</td>
+</tr>
+<tr>
+<td>Frise</td>
+<td><code>#tracks .tl-track[data-path] .kf[data-i]</code></td>
+<td>Clés d’un réglage animé.</td>
+</tr>
+<tr>
+<td>Frise</td>
+<td><code>#kfBar [data-e="lin|io|in|out|hold"]</code>, <code>#kfDel</code></td>
+<td>Courbe de la clé sélectionnée, suppression.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#exportBtn</code></td>
+<td>Ouvre la boîte d’export.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#dialog [data-o="fmt"] [data-v="mp4|webm|png"]</code></td>
+<td>Format.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#dialog [data-o="res"] [data-v="1080|2160|4320"]</code></td>
+<td>Définition (4320 seulement si proposée).</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#dialog [data-o="fps"] [data-v="30|60"]</code></td>
+<td>Images/s (vidéo).</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#xGo</code>, <code>#xCancel</code></td>
+<td>Lancer, annuler.</td>
+</tr>
+<tr>
+<td>Projets</td>
+<td><code>#saveBtn</code> → <code>#pName</code>, <code>#pOk</code></td>
+<td>Enregistrer dans le navigateur.</td>
+</tr>
+<tr>
+<td>Projets</td>
+<td><code>#projBtn</code> → <code>.proj [data-open]</code>, <code>[data-delp]</code>, <code>#expJson</code>, <code>#impJson</code> (→ <code>#jsonIn</code>), <code>#pClose</code></td>
+<td>Mes projets, export et import <code>.json</code>.</td>
+</tr>
+<tr>
+<td>Divers</td>
+<td><code>#undoBtn</code>, <code>#redoBtn</code>, <code>#modal</code>, <code>#toast</code></td>
+<td>Annuler, rétablir, boîte de dialogue (attribut <code>hidden</code>), message d’état.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Chemins d’images clés : <code>tp.&lt;modèle&gt;.&lt;réglage&gt;</code>, <code>bg.c1</code>, <code>bg.c2</code>, <code>bg.angle</code>, <code>tx.&lt;id&gt;.size|color|opacity|pos</code>, <code>logo.size|opacity</code>.</p>
+<p>Les ids de modèles sont visibles dans <code>#lib .tpl[data-id]</code> (ex. <code>showcase-stream</code> Flux vitrine, <code>sphere-wall</code> Mur sphérique, <code>cover-flow</code> Cover flow, <code>rf-box</code> Cube, <code>ticker-tilt</code> Ticker incliné).</p></section>
+<section id="fr-parcours-pas-a-pas" lang="fr"><h2><span class="n">04</span><span>Parcours pas à pas</span></h2>
+<ol>
+<li>Ouvrir <code>app.html?fresh</code>, attendre <code>window.ML_READY === true</code>.</li>
+<li>Cliquer <code>#clearAll</code>, puis <code>set_input_files("#fileIn", [...])</code> avec les fichiers de l’utilisateur. Vérifier que <code>#slots .slot:not(.empty)</code> en compte autant.</li>
+<li>Choisir le format : <code>#ratios [data-r="9:16"]</code> (vérifier <code>.active</code>).</li>
+<li>Choisir le modèle : <code>#lib .tpl[data-id="..."]</code> (vérifier <code>.on</code>). Si le modèle utilise plus d’images que fournies, il les répète ; ajuste avec <code>#slotMinus</code> / <code>#slotPlus</code> si l’utilisateur le demande.</li>
+<li>Régler (onglet Style), le fond et la durée si demandé.</li>
+<li>Textes et logo : seulement avec ce que l’utilisateur a fourni.</li>
+<li>Exporter : <code>#exportBtn</code>, choisir format / définition / images/s, <code>#xGo</code>, attendre le téléchargement.</li>
+</ol>
+<pre><code class="language-python">from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    b = p.chromium.launch()
+    page = b.new_page(viewport={&quot;width&quot;: 1440, &quot;height&quot;: 900}, accept_downloads=True)
+    page.goto(&quot;http://127.0.0.1:8000/app.html?fresh&quot;)
+    page.wait_for_function(&quot;window.ML_READY === true&quot;, timeout=90_000)
+
+    page.click(&quot;#clearAll&quot;)
+    page.set_input_files(&quot;#fileIn&quot;, [&quot;visuel-01.jpg&quot;, &quot;visuel-02.jpg&quot;, &quot;visuel-03.jpg&quot;])
+    page.wait_for_function(&quot;document.querySelectorAll('#slots .slot:not(.empty)').length &gt;= 3&quot;)
+
+    page.click('#ratios [data-r=&quot;9:16&quot;]')
+    page.click('#lib .tpl[data-id=&quot;cover-flow&quot;]')
+    page.click('#durs [data-d=&quot;10&quot;]')
+
+    page.click(&quot;#exportBtn&quot;)
+    page.click('#dialog [data-o=&quot;fmt&quot;] [data-v=&quot;mp4&quot;]')
+    page.click('#dialog [data-o=&quot;res&quot;] [data-v=&quot;1080&quot;]')
+    with page.expect_download(timeout=900_000) as dl:
+        page.click(&quot;#xGo&quot;)
+    dl.value.save_as(&quot;cover-flow-9x16.mp4&quot;)
+</code></pre>
+<p>Régler un curseur : <code>fill()</code> ne marche pas sur un <code>input[type=range]</code>. Donne la valeur puis déclenche <code>input</code> (application) et <code>change</code> (mémorisation et historique) :</p>
+<pre><code class="language-js">const r = document.querySelector('input.rg[data-p=&quot;tp.sphere-wall.cornerRadius&quot;]');
+r.value = 4; r.dispatchEvent(new Event('input', { bubbles: true })); r.dispatchEvent(new Event('change', { bubbles: true }));
+</code></pre>
+<p>Une couleur : <code>page.fill('input[type=color][data-p="bg.c1"]', '#111111')</code>.</p></section>
+<section id="fr-images-cles" lang="fr"><h2><span class="n">05</span><span>Images clés</span></h2>
+<ol>
+<li>Mettre en pause (<code>#playBtn</code> ou Espace) et placer le temps : clic sur <code>#scrub</code> à la position voulue (0 = début, largeur = fin), ou flèches ← / → (une image, Maj = 10 images).</li>
+<li>Cliquer le losange <code>.kbtn[data-k="&lt;chemin&gt;"]</code> : une clé est posée à l’instant courant avec la valeur actuelle.</li>
+<li>Placer un autre instant, changer la valeur du réglage : comme il est animé, la clé est créée ou modifiée à cet instant.</li>
+<li>Vérifier dans <code>#tracks</code> : une piste <code>.tl-track[data-path="&lt;chemin&gt;"]</code> avec ses <code>.kf</code>.</li>
+<li>Courbe : cliquer une <code>.kf</code>, puis <code>#kfBar [data-e=...]</code> (Linéaire <code>lin</code>, Douce <code>io</code>, Entrée <code>in</code>, Sortie <code>out</code>, Maintien <code>hold</code>).</li>
+</ol>
+<p>Après la dernière clé, l’interpolation revient vers la première : la boucle reste parfaite.</p></section>
+<section id="fr-export-et-fichiers" lang="fr"><h2><span class="n">06</span><span>Export et fichiers</span></h2>
+<ul>
+<li>Par défaut : <strong>MP4, 1080p, 30 images/s</strong>. Le petit côté vaut la définition : 1080p en 16:9 → 1920 × 1080 ; en 9:16 → 1080 × 1920.</li>
+<li>Nombre d’images = durée de la boucle × images/s ; l’image <code>i</code> est rendue à <code>t = i / total</code>, donc la dernière enchaîne sur la première.</li>
+<li>MP4 : H.264, sinon VP9 ou AV1 dans le MP4. WebM : VP9, AV1 ou VP8. 8K proposée seulement si le navigateur et la carte graphique le permettent.</li>
+<li>Sans WebCodecs mais avec <code>MediaRecorder</code> : enregistrement en temps réel, 1080p 30 images/s. Sans aucun encodeur : vidéo désactivée, PNG seulement.</li>
+<li>PNG : l’image affichée à l’instant courant, en pleine définition.</li>
+<li><strong>Nom du fichier</strong> : nom du projet simplifié + extension (<code>Sans titre</code> → <code>sans-titre.mp4</code>, <code>.webm</code>, <code>.png</code>). Le fichier arrive par téléchargement du navigateur (<code>expect_download</code>). En mise en page mobile, si le navigateur sait partager des fichiers, une boîte « C’est prêt » propose Télécharger ou Enregistrer ou partager.</li>
+<li>L’export peut prendre de quelques secondes à plusieurs minutes (bien plus en rendu logiciel). Le message <code>#toast</code> annonce « Vidéo exportée », « Image exportée », « Export annulé » ou « L’export a échoué : … ».</li>
+</ul></section>
+<section id="fr-etat-persistant" lang="fr"><h2><span class="n">07</span><span>État persistant</span></h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Où</th>
+<th>Clé</th>
+<th>Contenu</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localStorage</code></td>
+<td><code>motionlab.session</code></td>
+<td>Session courante <strong>sans les médias</strong> : modèle, format, réglages, fond, durée, textes, logo (position, taille), images clés. Ignorée avec <code>?fresh</code>.</td>
+</tr>
+<tr>
+<td>IndexedDB</td>
+<td>base <code>motionlab</code>, magasin <code>projects</code> (clé <code>id</code>)</td>
+<td>Projets enregistrés : <code>{ id, name, date, state, media: [{ id, type, name, blob }], thumb }</code>.</td>
+</tr>
+<tr>
+<td>Fichier</td>
+<td><code>&lt;nom&gt;.json</code> (Mes projets → Exporter .json)</td>
+<td><code>{ app: "motion-lab", v: 1, state, media: [{ id, type, name, data }] }</code>, médias en data URL.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Au rechargement, les emplacements reprennent les visuels d’exemple : pour garder les médias de l’utilisateur, enregistre le projet (<code>#saveBtn</code>) ou exporte le <code>.json</code>. Annuler / rétablir : 120 étapes, non conservées au rechargement.</p></section>
+<section id="fr-verifications-avant-de-rendre-le-travail" lang="fr"><h2><span class="n">08</span><span>Vérifications avant de rendre le travail</span></h2>
+<ul>
+<li>Les emplacements utilisés contiennent <strong>les fichiers de l’utilisateur</strong>, pas les exemples (et pas de logo d’exemple).</li>
+<li>Le modèle (<code>.tpl.on</code>), le format (<code>#ratios .active</code>) et la durée (<code>#durVal</code>) sont ceux demandés.</li>
+<li>Aucun calque texte « Nouveau projet » oublié ; les textes sont ceux validés par l’utilisateur.</li>
+<li>Le fichier exporté existe, a la bonne extension, une taille non nulle, et (si possible) les bonnes dimensions et durée (<code>ffprobe</code>).</li>
+<li>Aucun message d’erreur dans <code>#toast</code>, aucune erreur dans la console.</li>
+<li>Dis à l’utilisateur où est le fichier et ce que tu as réglé.</li>
+</ul></section>
+<section id="fr-limites-et-erreurs" lang="fr"><h2><span class="n">09</span><span>Limites et erreurs</span></h2>
+<ul>
+<li>Pas de son, ni à l’import ni à l’export.</li>
+<li>Une vidéo dans un emplacement se répète sur sa propre durée : pour une boucle parfaite, durée de boucle multiple de celle de la vidéo.</li>
+<li>Images réduites à 2048 px sur leur grand côté (1600 px sur appareil tactile).</li>
+<li>Textes à plat, par-dessus l’animation (ni inclinés ni en 3D) ; 4 polices : Instrument Sans, Clash Display, Instrument Serif, DM Mono.</li>
+<li>Les cartes sont triées carte par carte : avec des réglages extrêmes, deux cartes qui se croisent peuvent mal se superposer.</li>
+<li>Quelques modèles débordent volontairement du cadre (Ticker incliné, Cascade iso, Grande roue).</li>
+<li>Messages : « Ce fichier n’a pas pu être lu. » (média illisible), « Ce fichier n’est pas un projet Motion Lab. » (.json invalide), « L’export a échoué : … » (encodeur indisponible pour ce format ou cette définition : essaie WebM ou une définition plus basse).</li>
+<li>Sans WebGL2, l’app ne peut pas démarrer.</li>
+</ul></section>
+<section id="en-intro" lang="en"><p>This document is for AI agents (Claude Code, Codex, or any agent driving a browser through Playwright / CDP). It explains how to use <strong>Motion Lab</strong> (<code>app.html</code>), Binks Design’s motion-template editor: put visuals into slots, pick one of 258 templates, set the frame format, style, background, texts and logo, add keyframes, then export an MP4 or WebM video (or a PNG image).</p>
+<p>It lives in two places, always identical: <code>AGENTS.md</code> (Markdown, French then English) and the <code>agent/index.html</code> page. Short summary: <code>llms.txt</code>. Human documentation (French): <code>docs.html</code>.</p>
+<p><strong>Important: Motion Lab has no public JavaScript API.</strong> Drive it through its interface, with the real selectors listed below. Do not invent functions that do not exist.</p></section>
+<section id="en-golden-rule" lang="en"><h2><span class="n">01</span><span>Golden rule</span></h2>
+<p>Motion Lab animates the visuals the user provides. It is <strong>not</strong> a generator of images, logos or brand copy.</p>
+<ul>
+<li><strong>Never invent</strong> a logo, an image, a brand colour, a font or brand copy (name, tagline, project title). What the user provides (images, videos, logo, texts, colours) <strong>is the reference</strong>.</li>
+<li>Do not redraw or retouch a provided SVG: import it as is as the logo.</li>
+<li>The <strong>example visuals</strong> and <strong>example logo</strong> (Binks Design) loaded by the app are for testing: never deliver them as the user’s work. Empty the slots (<code>#clearAll</code>) before importing the user’s files.</li>
+<li>A title you propose is only a <strong>suggestion</strong>: get it approved before writing it into a text layer. The default text of a new layer (“Nouveau projet”) must be replaced or the layer deleted.</li>
+<li><strong>No API key, no account, no online service.</strong> The app embeds no AI. Never ask the user for a key.</li>
+<li><strong>Everything is local</strong>: file reading, WebGL2 rendering and video encoding happen in the browser. Nothing is uploaded (only the interface fonts are loaded from Google Fonts and Fontshare).</li>
+</ul>
+<p>After each action, <strong>check the visible state</strong> (<code>.on</code> / <code>.active</code> class, displayed value, filled slot, <code>#toast</code> message). A click is not proof of success.</p></section>
+<section id="en-getting-started" lang="en"><h2><span class="n">02</span><span>Getting started</span></h2>
+<p>The repository is a static site: <code>index.html</code> (home), <code>app.html</code> (the app, a single file), <code>docs.html</code>, <code>agent/index.html</code>, <code>AGENTS.md</code>, <code>llms.txt</code>, <code>robots.txt</code>, <code>assets/</code>.</p>
+<pre><code class="language-bash">python3 -m http.server 8000
+# then open http://127.0.0.1:8000/app.html?fresh
+</code></pre>
+<ul>
+<li><code>?fresh</code> ignores the saved session and starts from the default template (Flux vitrine, 16:9). Recommended for reproducible work.</li>
+<li>The app needs <strong>WebGL2</strong> (rendering) and, for frame-by-frame video export, <strong>WebCodecs</strong> (<code>VideoEncoder</code>). Recent Chromium is fine. Headless, launch Chromium with software WebGL if needed (<code>--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader</code>); export is then slow.</li>
+<li><strong>Wait until the app is ready</strong>: <code>window.ML_READY === true</code> (set once the example visuals are loaded).</li>
+<li>On load, the <strong>first 12 slots</strong> are filled with example visuals.</li>
+</ul>
+<h3 id="en-getting-started-global-object-window-ml-internal">Global object <code>window.ML</code> (internal)</h3>
+<p>The app exposes <code>window.ML</code>, an <strong>internal</strong> object meant for its own tests (state <code>ML.st</code>, list <code>ML.TEMPLATES</code>, etc.). It is neither a public nor a stable API. Use it <strong>read-only</strong> for checks, e.g. <code>ML.st.tpl</code> (current template), <code>ML.st.ratio</code>, <code>ML.st.dur</code>, <code>ML.st.texts</code>, <code>ML.TEMPLATES.map(t =&gt; [t.id, t.name, t.cat])</code>. Make changes through the interface.</p></section>
+<section id="en-interface-hooks" lang="en"><h2><span class="n">03</span><span>Interface hooks</span></h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Selector</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Import</td>
+<td><code>#fileIn</code></td>
+<td>Hidden <code>input[type=file]</code>, multiple, <code>image/*,video/*</code>. Fills <strong>empty</strong> slots, then appends.</td>
+</tr>
+<tr>
+<td>Import</td>
+<td><code>#mDrop</code></td>
+<td>“Importe tes images ou vidéos” drop zone (opens the picker).</td>
+</tr>
+<tr>
+<td>Media</td>
+<td><code>#clearAll</code></td>
+<td>“Tout vider”: empties every slot.</td>
+</tr>
+<tr>
+<td>Media</td>
+<td><code>#demoBtn</code></td>
+<td>“Exemples”: puts the example visuals back.</td>
+</tr>
+<tr>
+<td>Media</td>
+<td><code>#slots .slot[data-i="N"]</code></td>
+<td>Slot N (0 = first). <code>.empty</code> = empty, <code>.off</code> = beyond the number of images used.</td>
+</tr>
+<tr>
+<td>Media</td>
+<td><code>.slot [data-a="crop"]</code>, <code>[data-a="rep"]</code>, <code>[data-a="clr"]</code></td>
+<td>Crop, Replace (opens <code>#oneIn</code>), Empty.</td>
+</tr>
+<tr>
+<td>Media</td>
+<td><code>#slotMinus</code>, <code>#slotPlus</code></td>
+<td>Number of images used by the template (within its range).</td>
+</tr>
+<tr>
+<td>Templates</td>
+<td><code>#tplSearch</code></td>
+<td>Search by template or family name.</td>
+</tr>
+<tr>
+<td>Templates</td>
+<td><code>#lib .tpl[data-id="&lt;id&gt;"]</code></td>
+<td>A template button; <code>.on</code> = selected.</td>
+</tr>
+<tr>
+<td>Format</td>
+<td><code>#ratios [data-r="16:9"]</code></td>
+<td><code>16:9</code>, <code>4:3</code>, <code>1:1</code>, <code>4:5</code>, <code>3:4</code>, <code>9:16</code>; <code>.active</code> = current.</td>
+</tr>
+<tr>
+<td>Tabs</td>
+<td><code>.tab[data-tab="media"]</code>, <code>"style"</code>, <code>"text"</code></td>
+<td>Media, Style, Text.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>#pane-style input.rg[data-p="tp.&lt;template&gt;.&lt;setting&gt;"]</code></td>
+<td>Slider of a template setting.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>#pane-style [data-sel][data-v]</code>, <code>select[data-selp]</code>, <code>[data-tg]</code></td>
+<td>Template choices, lists, toggles.</td>
+</tr>
+<tr>
+<td>Style</td>
+<td><code>#tpReset</code></td>
+<td>Reset the template.</td>
+</tr>
+<tr>
+<td>Background</td>
+<td><code>#bgType [data-bt="color"]</code>, <code>"gradient"</code>, <code>"image"</code></td>
+<td>Background type.</td>
+</tr>
+<tr>
+<td>Background</td>
+<td><code>input[type=color][data-p="bg.c1"]</code>, <code>[data-p="bg.c2"]</code>, <code>input.rg[data-p="bg.angle"]</code></td>
+<td>Colours and angle.</td>
+</tr>
+<tr>
+<td>Background</td>
+<td><code>#bgIn</code></td>
+<td><code>input[type=file]</code> for the background image.</td>
+</tr>
+<tr>
+<td>Duration</td>
+<td><code>#durs [data-d="5"]</code> … <code>"30"</code>, <code>#durRg</code></td>
+<td>Loop duration (2 to 40 s).</td>
+</tr>
+<tr>
+<td>Text</td>
+<td><code>#addText</code></td>
+<td>Adds a text layer (<code>t1</code>, <code>t2</code>…).</td>
+</tr>
+<tr>
+<td>Text</td>
+<td><code>.layer-card[data-tx="t1"] textarea[data-f="text"]</code></td>
+<td>Text content.</td>
+</tr>
+<tr>
+<td>Text</td>
+<td><code>select[data-f="font"]</code>, <code>[data-w="400|500|600"]</code>, <code>[data-al="left|center|right"]</code>, <code>[data-y]</code></td>
+<td>Font, weight, alignment, Top/Centre/Bottom position.</td>
+</tr>
+<tr>
+<td>Text</td>
+<td><code>[data-p="tx.t1.size"]</code>, <code>"tx.t1.color"</code>, <code>"tx.t1.opacity"</code></td>
+<td>Size, colour, opacity.</td>
+</tr>
+<tr>
+<td>Text</td>
+<td><code>[data-del="t1"]</code></td>
+<td>Delete the layer.</td>
+</tr>
+<tr>
+<td>Logo</td>
+<td><code>#logoPick</code> → <code>#logoIn</code></td>
+<td>Import a logo (PNG or SVG).</td>
+</tr>
+<tr>
+<td>Logo</td>
+<td><code>#logoPos [data-x]</code>, <code>[data-p="logo.size"]</code>, <code>[data-p="logo.opacity"]</code>, <code>#logoClr</code></td>
+<td>Position, size, opacity, remove.</td>
+</tr>
+<tr>
+<td>Keyframes</td>
+<td><code>.kbtn[data-k="&lt;path&gt;"]</code></td>
+<td>Diamond: adds or removes a key at the current time.</td>
+</tr>
+<tr>
+<td>Timeline</td>
+<td><code>#playBtn</code>, <code>#scrub</code>, <code>#tTime</code></td>
+<td>Play/pause, time scrubber, displayed time.</td>
+</tr>
+<tr>
+<td>Timeline</td>
+<td><code>#tracks .tl-track[data-path] .kf[data-i]</code></td>
+<td>Keys of an animated setting.</td>
+</tr>
+<tr>
+<td>Timeline</td>
+<td><code>#kfBar [data-e="lin|io|in|out|hold"]</code>, <code>#kfDel</code></td>
+<td>Curve of the selected key, delete.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#exportBtn</code></td>
+<td>Opens the export dialog.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#dialog [data-o="fmt"] [data-v="mp4|webm|png"]</code></td>
+<td>Format.</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#dialog [data-o="res"] [data-v="1080|2160|4320"]</code></td>
+<td>Resolution (4320 only when offered).</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#dialog [data-o="fps"] [data-v="30|60"]</code></td>
+<td>Frames per second (video).</td>
+</tr>
+<tr>
+<td>Export</td>
+<td><code>#xGo</code>, <code>#xCancel</code></td>
+<td>Start, cancel.</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td><code>#saveBtn</code> → <code>#pName</code>, <code>#pOk</code></td>
+<td>Save in the browser.</td>
+</tr>
+<tr>
+<td>Projects</td>
+<td><code>#projBtn</code> → <code>.proj [data-open]</code>, <code>[data-delp]</code>, <code>#expJson</code>, <code>#impJson</code> (→ <code>#jsonIn</code>), <code>#pClose</code></td>
+<td>My projects, <code>.json</code> export and import.</td>
+</tr>
+<tr>
+<td>Misc</td>
+<td><code>#undoBtn</code>, <code>#redoBtn</code>, <code>#modal</code>, <code>#toast</code></td>
+<td>Undo, redo, dialog (<code>hidden</code> attribute), status message.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Keyframe paths: <code>tp.&lt;template&gt;.&lt;setting&gt;</code>, <code>bg.c1</code>, <code>bg.c2</code>, <code>bg.angle</code>, <code>tx.&lt;id&gt;.size|color|opacity|pos</code>, <code>logo.size|opacity</code>.</p>
+<p>Template ids are visible in <code>#lib .tpl[data-id]</code> (e.g. <code>showcase-stream</code> Flux vitrine, <code>sphere-wall</code> Mur sphérique, <code>cover-flow</code> Cover flow, <code>rf-box</code> Cube, <code>ticker-tilt</code> Ticker incliné).</p></section>
+<section id="en-step-by-step" lang="en"><h2><span class="n">04</span><span>Step by step</span></h2>
+<ol>
+<li>Open <code>app.html?fresh</code>, wait for <code>window.ML_READY === true</code>.</li>
+<li>Click <code>#clearAll</code>, then <code>set_input_files("#fileIn", [...])</code> with the user’s files. Check that <code>#slots .slot:not(.empty)</code> counts as many.</li>
+<li>Pick the format: <code>#ratios [data-r="9:16"]</code> (check <code>.active</code>).</li>
+<li>Pick the template: <code>#lib .tpl[data-id="..."]</code> (check <code>.on</code>). If the template uses more images than provided, it repeats them; adjust with <code>#slotMinus</code> / <code>#slotPlus</code> if the user asks.</li>
+<li>Adjust (Style tab), background and duration if asked.</li>
+<li>Texts and logo: only with what the user provided.</li>
+<li>Export: <code>#exportBtn</code>, pick format / resolution / fps, <code>#xGo</code>, wait for the download.</li>
+</ol>
+<pre><code class="language-python">from playwright.sync_api import sync_playwright
+
+with sync_playwright() as p:
+    b = p.chromium.launch()
+    page = b.new_page(viewport={&quot;width&quot;: 1440, &quot;height&quot;: 900}, accept_downloads=True)
+    page.goto(&quot;http://127.0.0.1:8000/app.html?fresh&quot;)
+    page.wait_for_function(&quot;window.ML_READY === true&quot;, timeout=90_000)
+
+    page.click(&quot;#clearAll&quot;)
+    page.set_input_files(&quot;#fileIn&quot;, [&quot;visual-01.jpg&quot;, &quot;visual-02.jpg&quot;, &quot;visual-03.jpg&quot;])
+    page.wait_for_function(&quot;document.querySelectorAll('#slots .slot:not(.empty)').length &gt;= 3&quot;)
+
+    page.click('#ratios [data-r=&quot;9:16&quot;]')
+    page.click('#lib .tpl[data-id=&quot;cover-flow&quot;]')
+    page.click('#durs [data-d=&quot;10&quot;]')
+
+    page.click(&quot;#exportBtn&quot;)
+    page.click('#dialog [data-o=&quot;fmt&quot;] [data-v=&quot;mp4&quot;]')
+    page.click('#dialog [data-o=&quot;res&quot;] [data-v=&quot;1080&quot;]')
+    with page.expect_download(timeout=900_000) as dl:
+        page.click(&quot;#xGo&quot;)
+    dl.value.save_as(&quot;cover-flow-9x16.mp4&quot;)
+</code></pre>
+<p>Setting a slider: <code>fill()</code> does not work on an <code>input[type=range]</code>. Set the value, then dispatch <code>input</code> (applies it) and <code>change</code> (saves it and records history):</p>
+<pre><code class="language-js">const r = document.querySelector('input.rg[data-p=&quot;tp.sphere-wall.cornerRadius&quot;]');
+r.value = 4; r.dispatchEvent(new Event('input', { bubbles: true })); r.dispatchEvent(new Event('change', { bubbles: true }));
+</code></pre>
+<p>A colour: <code>page.fill('input[type=color][data-p="bg.c1"]', '#111111')</code>.</p></section>
+<section id="en-keyframes" lang="en"><h2><span class="n">05</span><span>Keyframes</span></h2>
+<ol>
+<li>Pause (<code>#playBtn</code> or Space) and set the time: click <code>#scrub</code> at the wanted position (left = start, right = end), or ← / → keys (one frame, Shift = 10 frames).</li>
+<li>Click the diamond <code>.kbtn[data-k="&lt;path&gt;"]</code>: a key is added at the current time with the current value.</li>
+<li>Move to another time and change the setting: since it is animated, the key is created or updated at that time.</li>
+<li>Check <code>#tracks</code>: a <code>.tl-track[data-path="&lt;path&gt;"]</code> track with its <code>.kf</code> keys.</li>
+<li>Curve: click a <code>.kf</code>, then <code>#kfBar [data-e=...]</code> (Linear <code>lin</code>, Smooth <code>io</code>, In <code>in</code>, Out <code>out</code>, Hold <code>hold</code>).</li>
+</ol>
+<p>After the last key, interpolation goes back to the first one: the loop stays seamless.</p></section>
+<section id="en-export-and-files" lang="en"><h2><span class="n">06</span><span>Export and files</span></h2>
+<ul>
+<li>Default: <strong>MP4, 1080p, 30 fps</strong>. The short side equals the resolution: 1080p in 16:9 → 1920 × 1080; in 9:16 → 1080 × 1920.</li>
+<li>Frame count = loop duration × fps; frame <code>i</code> is rendered at <code>t = i / total</code>, so the last frame flows into the first.</li>
+<li>MP4: H.264, else VP9 or AV1 in MP4. WebM: VP9, AV1 or VP8. 8K is offered only when the browser and GPU allow it.</li>
+<li>Without WebCodecs but with <code>MediaRecorder</code>: real-time recording, 1080p 30 fps. With no encoder at all: video disabled, PNG only.</li>
+<li>PNG: the frame shown at the current time, at full resolution.</li>
+<li><strong>File name</strong>: simplified project name + extension (<code>Sans titre</code> → <code>sans-titre.mp4</code>, <code>.webm</code>, <code>.png</code>). The file arrives as a browser download (<code>expect_download</code>). In the mobile layout, when the browser can share files, a “C’est prêt” dialog offers Télécharger (download) or Enregistrer ou partager (share).</li>
+<li>Export takes from a few seconds to several minutes (much longer with software rendering). The <code>#toast</code> message reads “Vidéo exportée”, “Image exportée”, “Export annulé” or “L’export a échoué : …”.</li>
+</ul></section>
+<section id="en-persistent-state" lang="en"><h2><span class="n">07</span><span>Persistent state</span></h2>
+<div class="tbl"><table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Key</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>localStorage</code></td>
+<td><code>motionlab.session</code></td>
+<td>Current session <strong>without media</strong>: template, format, settings, background, duration, texts, logo (position, size), keyframes. Ignored with <code>?fresh</code>.</td>
+</tr>
+<tr>
+<td>IndexedDB</td>
+<td>database <code>motionlab</code>, store <code>projects</code> (key <code>id</code>)</td>
+<td>Saved projects: <code>{ id, name, date, state, media: [{ id, type, name, blob }], thumb }</code>.</td>
+</tr>
+<tr>
+<td>File</td>
+<td><code>&lt;name&gt;.json</code> (Mes projets → Exporter .json)</td>
+<td><code>{ app: "motion-lab", v: 1, state, media: [{ id, type, name, data }] }</code>, media as data URLs.</td>
+</tr>
+</tbody>
+</table></div>
+<p>On reload, slots go back to the example visuals: to keep the user’s media, save the project (<code>#saveBtn</code>) or export the <code>.json</code>. Undo / redo: 120 steps, not kept across reloads.</p></section>
+<section id="en-checks-before-handing-back" lang="en"><h2><span class="n">08</span><span>Checks before handing back</span></h2>
+<ul>
+<li>The slots in use hold <strong>the user’s files</strong>, not the examples (and no example logo).</li>
+<li>Template (<code>.tpl.on</code>), format (<code>#ratios .active</code>) and duration (<code>#durVal</code>) are the requested ones.</li>
+<li>No forgotten “Nouveau projet” text layer; texts are the ones the user approved.</li>
+<li>The exported file exists, has the right extension, a non-zero size and, if possible, the right dimensions and duration (<code>ffprobe</code>).</li>
+<li>No error message in <code>#toast</code>, no error in the console.</li>
+<li>Tell the user where the file is and what you set.</li>
+</ul></section>
+<section id="en-limits-and-errors" lang="en"><h2><span class="n">09</span><span>Limits and errors</span></h2>
+<ul>
+<li>No sound, neither on import nor on export.</li>
+<li>A video in a slot repeats on its own duration: for a seamless loop, make the loop duration a multiple of the video’s.</li>
+<li>Images are downscaled to 2048 px on their long side (1600 px on touch devices).</li>
+<li>Texts stay flat, on top of the animation (not tilted, not 3D); 4 fonts: Instrument Sans, Clash Display, Instrument Serif, DM Mono.</li>
+<li>Cards are sorted card by card: with extreme settings, two crossing cards may overlap in the wrong order.</li>
+<li>A few templates overflow the frame on purpose (Ticker incliné, Cascade iso, Grande roue).</li>
+<li>Messages: “Ce fichier n’a pas pu être lu.” (unreadable media), “Ce fichier n’est pas un projet Motion Lab.” (invalid .json), “L’export a échoué : …” (no encoder for this format or resolution: try WebM or a lower resolution).</li>
+<li>Without WebGL2, the app cannot start.</li>
+</ul></section>
+    </article>
+  </div>
+</main>
+<footer class="foot doc-foot">
+  <div class="in-w foot-in">
+    <span class="foot-l"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="6" width="9" height="12" rx="2.2" fill="none" stroke="#111" stroke-width="2"/><rect x="11.5" y="6" width="9" height="12" rx="2.2" fill="#111" transform="rotate(12 16 12)"/><circle cx="18.6" cy="5.2" r="2" fill="#ff5500"/></svg>Motion Lab · by binks design</span>
+    <ul class="foot-r">
+      <li><a href="../docs.html">Documentation</a></li>
+      <li><a href="../agent/index.html">Agents IA</a></li>
+      <li><a href="mailto:graphistedubinks@gmail.com">graphistedubinks@gmail.com</a></li>
+      <li><a class="pillk" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">Instagram @graphiste.binks</a></li>
+    </ul>
+    <small>Gratuit, sans compte, tout est calculé dans ton navigateur. Polices de ces pages : Clash Display (<a href="../assets/fonts/ClashDisplay-FFL.txt">licence FFL</a>) et Instrument Sans (<a href="../assets/fonts/InstrumentSans-OFL.txt">licence OFL</a>). Visuels d’exemple de l’app et des captures : Binks Design.</small>
+  </div>
+</footer>
+</div>
+</body>
+</html>

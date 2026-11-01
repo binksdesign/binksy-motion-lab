@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Documentation — Motion Lab</title>
+<meta name="description" content="Mode d’emploi de Motion Lab : importer tes visuels, choisir parmi 258 modèles, format, style, fond, textes et logo, images clés, export MP4, WebM ou PNG, projets, raccourcis et limites.">
+<meta name="theme-color" content="#111111">
+<meta name="author" content="Binks Design">
+<meta property="og:title" content="Documentation — Motion Lab">
+<meta property="og:description" content="Mode d’emploi de Motion Lab : importer tes visuels, choisir parmi 258 modèles, format, style, fond, textes et logo, images clés, export MP4, WebM ou PNG, projets, raccourcis et limites.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Cg transform='translate%284 4%29'%3E%3Crect x='3.5' y='6' width='9' height='12' rx='2.2' fill='none' stroke='%23f2f2f0' stroke-width='2'/%3E%3Crect x='11.5' y='6' width='9' height='12' rx='2.2' fill='%23f2f2f0' transform='rotate%2812 16 12%29'/%3E%3Ccircle cx='18.6' cy='5.2' r='2' fill='%23ff5500'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="alternate" type="text/markdown" href="AGENTS.md" title="Mode d’emploi pour agents IA (Markdown, FR puis EN)">
+<link rel="help" href="agent/" title="Agents IA">
+<link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt">
+<link rel="stylesheet" href="assets/site.css">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)document.documentElement.classList.add('anim');</script>
+<script src="assets/site.js" defer></script>
+</head>
+<!-- Agents IA / AI agents : lisez AGENTS.md (Markdown, français puis anglais) ou agent/index.html avant d’agir. L’application est app.html ; pas d’API JavaScript publique : pilotage par l’interface (#fileIn, #ratios, .tpl[data-id], #exportBtn…). Aucune clé API, tout est calculé dans le navigateur. -->
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<noscript><p style="margin:0;padding:10px 18px;background:#ff5500;color:#0b0b0b;font:600 14px/1.4 sans-serif">Agents IA : le mode d’emploi complet est dans <a href="AGENTS.md">AGENTS.md</a> (page HTML : <a href="agent/index.html">agent/</a>). L’application (<a href="app.html">app.html</a>) a besoin de JavaScript et de WebGL2.</p></noscript>
+<header class="top">
+  <a class="brand" href="index.html" aria-label="Motion Lab — accueil"><span class="mk"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="6" width="9" height="12" rx="2.2" fill="none" stroke="#f2f2f0" stroke-width="2"/><rect x="11.5" y="6" width="9" height="12" rx="2.2" fill="#f2f2f0" transform="rotate(12 16 12)"/><circle cx="18.6" cy="5.2" r="2" fill="#ff5500"/></svg></span><b>Motion Lab</b></a>
+  <a class="sig" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">by binks design</a>
+  <nav class="nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a>
+    <a href="docs.html" aria-current="page">Documentation</a>
+    <a href="agent/index.html">Agents IA</a>
+    <a class="cta" href="app.html">Ouvrir l’app</a>
+  </nav>
+</header>
+<div class="sheet"><main id="contenu">
+  <div class="doc-hero">
+    <div class="plane" aria-hidden="true"></div>
+    <div class="in-w">
+      <p class="kicker"><i aria-hidden="true"></i>Documentation · Motion Lab by binks design</p>
+      <h1 class="doc-h1"><span class="mask"><span>Mode</span></span><span class="mask"><span style="--i:1">d’<em>emploi</em></span></span></h1>
+      <p class="lead">Tout ce qu’il faut savoir pour mettre tes visuels en mouvement : choisir un modèle, régler, titrer, animer avec des <b>images clés</b> et exporter une boucle propre en <b>MP4</b>, <b>WebM</b> ou <b>PNG</b>.</p>
+      <div class="meta">
+        <a class="tag" href="app.html">Ouvrir l’app</a>
+        <a class="tag" href="app.html?fresh">Nouvelle session</a>
+        <a class="tag" href="agent/index.html">Agents IA</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="in-w doc-grid">
+    <details class="toc" open>
+      <summary><span>Sommaire</span><span class="cur"></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <nav class="toc-body" aria-label="Sommaire">
+        <span class="toc-h">Sommaire</span>
+        <ol>
+          <li><a href="#demarrer"><span class="n">01</span><span>Démarrer</span></a></li>
+          <li><a href="#medias"><span class="n">02</span><span>Médias et emplacements</span></a></li>
+          <li><a href="#modeles"><span class="n">03</span><span>Les 258 modèles</span></a></li>
+          <li><a href="#format"><span class="n">04</span><span>Format du cadre</span></a></li>
+          <li><a href="#style"><span class="n">05</span><span>Style du modèle</span></a></li>
+          <li><a href="#fond"><span class="n">06</span><span>Fond et durée</span></a></li>
+          <li><a href="#texte"><span class="n">07</span><span>Textes et logo</span></a></li>
+          <li><a href="#cles"><span class="n">08</span><span>Images clés et frise</span></a></li>
+          <li><a href="#exporter"><span class="n">09</span><span>Exporter</span></a></li>
+          <li><a href="#projets"><span class="n">10</span><span>Projets et sauvegarde locale</span></a></li>
+          <li><a href="#mobile"><span class="n">11</span><span>Sur téléphone et tablette</span></a></li>
+          <li><a href="#raccourcis"><span class="n">12</span><span>Raccourcis clavier</span></a></li>
+          <li><a href="#faq"><span class="n">13</span><span>FAQ et limites</span></a></li>
+          <li><a href="#agents"><span class="n">14</span><span>Agents IA</span></a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <article class="prose">
+
+      <section id="demarrer">
+        <h2><span class="n">01</span><span>Démarrer</span></h2>
+        <p>Motion Lab tient en une seule page, <a href="app.html">app.html</a>. Rien à installer, aucun compte : ouvre la page, mets tes visuels, choisis un modèle, exporte.</p>
+        <ol>
+          <li><strong>Médias</strong> : clique sur <em>Tout vider</em> pour retirer les visuels d’exemple, puis importe tes images ou tes vidéos.</li>
+          <li><strong>Modèle</strong> : choisis-le dans la bibliothèque à gauche (recherche en haut).</li>
+          <li><strong>Format</strong> : 16:9, 4:3, 1:1, 4:5, 3:4 ou 9:16, en haut de l’aperçu.</li>
+          <li><strong>Style</strong> et <strong>Texte</strong> : règle le modèle, le fond, la durée de la boucle, ajoute un titre et ton logo.</li>
+          <li><strong>Exporter</strong> (bouton orange en haut à droite) : MP4, WebM ou PNG. Le fichier arrive dans tes téléchargements.</li>
+        </ol>
+        <div class="note"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><p>Motion Lab dessine avec la carte graphique, en <strong>WebGL2</strong>, et encode la vidéo avec <strong>WebCodecs</strong> quand le navigateur le permet. Utilise un Chrome, Edge, Firefox ou Safari récent.</p></div>
+        <p>À l’ouverture, l’app charge des <strong>visuels d’exemple</strong> dans les emplacements et reprend tes réglages de la dernière fois. L’adresse <a href="app.html?fresh">app.html?fresh</a> ignore ces réglages mémorisés et repart du modèle par défaut (Flux vitrine).</p>
+      </section>
+
+      <section id="medias">
+        <h2><span class="n">02</span><span>Médias et emplacements</span></h2>
+        <p>L’onglet <strong>Médias</strong> (à droite) liste les <strong>emplacements</strong> : chaque modèle y pioche ses images dans l’ordre.</p>
+        <ul>
+          <li><strong>Importer</strong> : clique sur <em>Importe tes images ou vidéos</em>, ou glisse tes fichiers sur l’aperçu ou sur l’onglet Médias. Plusieurs fichiers à la fois, c’est possible.</li>
+          <li>Les fichiers vont dans les <strong>emplacements vides</strong>, puis à la suite. Comme les exemples remplissent les 12 premiers emplacements, <strong>clique d’abord sur <em>Tout vider</em></strong> pour que tes visuels soient utilisés. Tu peux aussi déposer un fichier directement sur un emplacement pour le remplacer.</li>
+          <li><strong>Images utilisées</strong> : les boutons − et + règlent combien d’emplacements le modèle utilise, dans la plage propre au modèle (indiquée sous le titre, par exemple « de 4 à 16 images »). Les emplacements au-delà sont grisés.</li>
+          <li>Sur chaque emplacement : <strong>Recadrer</strong> (glisse l’image, zoom de 1 à 3), <strong>Remplacer</strong>, <strong>Vider</strong>. Glisse un emplacement sur un autre pour changer l’ordre.</li>
+          <li><strong>Exemples</strong> remet les visuels d’exemple ; <strong>Tout vider</strong> vide tous les emplacements.</li>
+        </ul>
+        <div class="tbl"><table>
+          <thead><tr><th>Type</th><th>À savoir</th></tr></thead>
+          <tbody>
+            <tr><td>Image</td><td>Tout format que ton navigateur sait ouvrir (PNG, JPEG, WebP…). Réduite à 2048 px sur son grand côté (1600 px sur téléphone et tablette) pour rester fluide.</td></tr>
+            <tr><td>Vidéo</td><td>Tout format que ton navigateur sait lire (un MP4 en H.264 est le plus sûr). Lue en boucle et <strong>sans le son</strong>. À l’export, elle est recalée image par image.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="modeles">
+        <h2><span class="n">03</span><span>Les 258 modèles</span></h2>
+        <p>La bibliothèque, à gauche, range les modèles par famille. Chaque vignette est calculée avec <strong>tes</strong> visuels ; la recherche filtre par nom de modèle ou de famille. Un clic applique le modèle : tes médias, tes textes et ton logo restent en place.</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Famille</th><th>Modèles</th><th>Exemples</th></tr></thead>
+          <tbody>
+            <tr><td><strong>3D et perspective</strong></td><td>33</td><td>Flux vitrine, Mur sphérique, Globe de cartes, Cube, Couloir, Axe 3D, Manège…</td></tr>
+            <tr><td><strong>Multiscène</strong></td><td>14</td><td>Rolodex en vol, Escalier, Plongée grille, Triple scène, Éventail mélangé…</td></tr>
+            <tr><td><strong>Isométrique</strong></td><td>3</td><td>Cascade iso, Focus iso, Orbite iso</td></tr>
+            <tr><td><strong>Orbite</strong></td><td>25</td><td>Vitrine orbitale, Éclosion orbitale, Roue, Ronde, Satellite, Couronne…</td></tr>
+            <tr><td><strong>Carrousel et flux</strong></td><td>28</td><td>Totem de cartes, Pellicule, Grande roue, Cover flow, Glissière…</td></tr>
+            <tr><td><strong>Grille</strong></td><td>20</td><td>Grille révélée, Grille retournée, Ticker en boucle, Ticker incliné, Damier, Planche…</td></tr>
+            <tr><td><strong>Projecteur</strong></td><td>8</td><td>Scène centrale, Glissement focus, Deck pelé, Zoom parallaxe, Bandeau</td></tr>
+            <tr><td><strong>Révélation et volet</strong></td><td>7</td><td>Volet diagonal, Bandes, Volets fendus, Mosaïque, Rideau</td></tr>
+            <tr><td><strong>Pile et dispersion</strong></td><td>15</td><td>Pile glissée, Chute en cascade, Lancer de cartes, Pile, Gravité…</td></tr>
+            <tr><td><strong>Showreel (séquences)</strong></td><td>16</td><td>Loupe liquide, Survol, Effeuillage, Masque, Glisse, Claquement…</td></tr>
+            <tr><td><strong>Défilés</strong></td><td>25</td><td>Œil, Bento, Colonnes en marche, Défilé 01 à 22</td></tr>
+            <tr><td><strong>Decks et pages</strong></td><td>26</td><td>Jeté, Feuillet, Livre, Donne, Volte</td></tr>
+            <tr><td><strong>Globes et nuées</strong></td><td>24</td><td>Tourbillon, Champ, Planète, Vrille, Strates, Essaim</td></tr>
+            <tr><td><strong>Coupes et pulsations</strong></td><td>14</td><td>Toupie, Flash, Floraison</td></tr>
+          </tbody>
+        </table></div>
+        <p>Chaque modèle a une durée de boucle et un nombre d’images par défaut, que tu peux changer. Les modèles « objet » (anneaux, globes, decks, livres, cubes…) sont cadrés automatiquement pour remplir le format choisi, en paysage comme en portrait.</p>
+        <div class="note"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><p>Les séquences de la famille <strong>Showreel</strong> n’ont pas de textes intégrés : ajoute tes titres avec les calques Texte.</p></div>
+      </section>
+
+      <section id="format">
+        <h2><span class="n">04</span><span>Format du cadre</span></h2>
+        <p>Les boutons au-dessus de l’aperçu règlent le format du cadre :</p>
+        <ul class="chips" aria-label="Formats"><li><span class="tag">16:9 paysage</span></li><li><span class="tag">4:3 classique</span></li><li><span class="tag">1:1 carré</span></li><li><span class="tag">4:5 portrait</span></li><li><span class="tag">3:4 portrait classique</span></li><li><span class="tag">9:16 story, Reel</span></li></ul>
+        <p>À l’export, le <strong>petit côté</strong> prend la définition choisie : en 1080p, un 16:9 sort en 1920 × 1080 px et un 9:16 en 1080 × 1920 px.</p>
+      </section>
+
+      <section id="style">
+        <h2><span class="n">05</span><span>Style du modèle</span></h2>
+        <p>L’onglet <strong>Style</strong> affiche les réglages du modèle courant, regroupés selon le modèle :</p>
+        <ul>
+          <li><strong>Mise en page</strong> : zoom, marge, arrondi des coins, <strong>format des cartes</strong> (Auto, 1:1, 4:3, 3:4, 4:5, 16:9, 9:16), inclinaison, courbure, écart, fondu des bords… selon le modèle</li>
+          <li><strong>Mouvement</strong> : sens, courbe, vitesse, arrêts, rotation… selon le modèle ;</li>
+          <li><strong>Ombre</strong> : un interrupteur, puis ses réglages détaillés ;</li>
+          <li><strong>Position</strong> (repliée) : décalage X et Y ;</li>
+          <li>et, pour certains modèles, <strong>Collage</strong>, <strong>Bobine</strong> ou <strong>Volet du fond</strong>.</li>
+        </ul>
+        <p><strong>Réinitialiser</strong> (à côté du nom du modèle) remet ses réglages, son nombre d’images, ses images clés et sa durée par défaut.</p>
+      </section>
+
+      <section id="fond">
+        <h2><span class="n">06</span><span>Fond et durée</span></h2>
+        <ul>
+          <li><strong>Fond</strong> : <em>Couleur</em>, <em>Dégradé</em> (deux couleurs et un angle) ou <em>Image</em> (recadrée pour couvrir le cadre). Couleurs et angle s’animent.</li>
+          <li><strong>Durée de la boucle</strong> : 5, 10, 15, 20 ou 30 s en un clic, ou de 2 à 40 s au curseur, par demi-seconde.</li>
+        </ul>
+        <p>Choisir un modèle reprend sa durée par défaut ; règle la durée après avoir choisi le modèle.</p>
+      </section>
+
+      <section id="texte">
+        <h2><span class="n">07</span><span>Textes et logo</span></h2>
+        <h3>Textes</h3>
+        <p><strong>Ajouter</strong> crée un calque texte (« Nouveau projet » par défaut) à remplacer par le tien. Pour chaque texte :</p>
+        <ul>
+          <li>le texte lui-même (un retour à la ligne = une nouvelle ligne) ;</li>
+          <li>la police : <strong>Instrument Sans</strong>, <strong>Clash Display</strong>, <strong>Instrument Serif</strong> ou <strong>DM Mono</strong> ;</li>
+          <li>la graisse (Normal, Moyen, Gras) et l’alignement ;</li>
+          <li>la taille, la couleur, l’opacité et la position (Haut, Centre, Bas) — les quatre s’animent.</li>
+        </ul>
+        <p>Glisse un texte directement sur l’aperçu pour le placer. Les textes restent à plat, par-dessus l’animation : ni inclinés, ni en 3D.</p>
+        <h3>Logo</h3>
+        <p><strong>Importer un logo</strong> (PNG ou SVG) le pose en surimpression. Règle sa taille et son opacité (animables), choisis une des cinq positions rapides (quatre coins ou centre) ou glisse-le sur l’aperçu. <strong>Logo d’exemple</strong> pose le logo Binks Design pour tester.</p>
+      </section>
+
+      <section id="cles">
+        <h2><span class="n">08</span><span>Images clés et frise</span></h2>
+        <p>À côté de chaque curseur et de chaque couleur animable, un <strong>losange</strong> :</p>
+        <ul>
+          <li><strong>gris</strong> : le réglage n’est pas animé ;</li>
+          <li><strong>contour orange</strong> : il est animé ;</li>
+          <li><strong>plein orange</strong> : il y a une clé à l’instant courant.</li>
+        </ul>
+        <p>Clique le losange pour poser (ou retirer) une clé à l’instant courant. Ensuite, bouger ce réglage crée ou modifie la clé à l’instant courant et met la lecture en pause.</p>
+        <p>La <strong>frise</strong>, sous l’aperçu, a la lecture, le curseur de temps et une piste par réglage animé. Glisse un losange pour déplacer la clé ; clique dessus pour choisir sa <strong>courbe</strong> — Linéaire, Douce, Entrée, Sortie, Maintien — ou <strong>Supprimer la clé</strong>.</p>
+        <div class="note"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><p>Après la dernière clé, l’animation revient vers la première : la boucle reste parfaite sans rien faire de plus.</p></div>
+      </section>
+
+      <section id="exporter">
+        <h2><span class="n">09</span><span>Exporter</span></h2>
+        <p><strong>Exporter</strong> ouvre les réglages de sortie :</p>
+        <div class="tbl"><table>
+          <thead><tr><th>Réglage</th><th>Choix</th></tr></thead>
+          <tbody>
+            <tr><td>Format</td><td>MP4, WebM ou Image PNG (l’image affichée à l’instant courant)</td></tr>
+            <tr><td>Définition</td><td>1080p ou 4K ; 8K seulement si ton navigateur et ta carte graphique le permettent</td></tr>
+            <tr><td>Fluidité</td><td>30 ou 60 images/s (vidéo)</td></tr>
+          </tbody>
+        </table></div>
+        <p>Par défaut : MP4, 1080p, 30 images/s. La vidéo est rendue <strong>image par image</strong> sur la durée de la boucle : la dernière image enchaîne exactement sur la première. Une barre de progression permet d’<strong>annuler</strong>.</p>
+        <h3>Comment la vidéo est encodée</h3>
+        <ul>
+          <li>Avec <strong>WebCodecs</strong> : MP4 en H.264 (sinon VP9 ou AV1 dans le MP4) ; WebM en VP9, AV1 ou VP8. En H.264, la 8K passe en VP9 ou AV1.</li>
+          <li>Sans WebCodecs mais avec l’enregistrement de canvas (anciens Safari iOS) : enregistrement <strong>en temps réel</strong>, 1080p, 30 images/s, pendant toute la durée de la boucle. Garde l’écran allumé.</li>
+          <li>Sinon, l’export vidéo est désactivé avec un message : exporte une image PNG.</li>
+        </ul>
+        <h3>Nom du fichier</h3>
+        <p>Le fichier prend le nom du projet, simplifié : un projet « Sans titre » donne <code>sans-titre.mp4</code>, <code>.webm</code> ou <code>.png</code>. Il arrive dans ton dossier de téléchargements ; sur téléphone, une feuille propose <em>Enregistrer ou partager</em> (Photos, Fichiers) ou <em>Télécharger</em>.</p>
+      </section>
+
+      <section id="projets">
+        <h2><span class="n">10</span><span>Projets et sauvegarde locale</span></h2>
+        <p><strong>Ce qui revient tout seul au rechargement</strong> : le modèle, le format, les réglages, le fond, la durée, les textes et les images clés, mémorisés dans le navigateur à chaque modification. <strong>Pas les médias</strong> : au rechargement, les emplacements reprennent les visuels d’exemple.</p>
+        <p>Pour garder tes médias, <strong>Enregistrer</strong> (bas de la barre de gauche) : le projet, ses médias et une miniature sont rangés dans le navigateur. <strong>Mes projets</strong> les liste : Ouvrir, Supprimer, <strong>Exporter .json</strong> (le projet avec ses médias, à garder ou à transmettre) et <strong>Importer .json</strong>.</p>
+        <p><strong>Annuler</strong> et <strong>Rétablir</strong> (en haut à droite) gardent jusqu’à 120 étapes.</p>
+        <div class="note warn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><p>Le stockage du navigateur est lié à l’adresse du site et au navigateur : vider les données du site efface la session et les projets enregistrés. Exporte en .json les projets qui comptent.</p></div>
+      </section>
+
+      <section id="mobile">
+        <h2><span class="n">11</span><span>Sur téléphone et tablette</span></h2>
+        <p>Sous 900 px de large (ou en paysage sur téléphone), Motion Lab passe en mise en page « app » :</p>
+        <ul>
+          <li>en haut : la pastille de <strong>format</strong>, le menu <strong>…</strong> (Mes projets, Enregistrer), Annuler, Rétablir et <strong>Exporter</strong> ;</li>
+          <li>en bas, une barre d’onglets : <strong>Modèles</strong>, <strong>Médias</strong>, <strong>Style</strong>, <strong>Texte</strong>, <strong>Frise</strong> ; chaque onglet ouvre un panneau qui glisse depuis le bas, à tirer vers le bas pour le fermer ;</li>
+          <li>touche un emplacement pour <em>Recadrer</em>, <em>Remplacer</em> ou <em>Vider</em> ; appui long puis glisser pour le déplacer ; pince pour zoomer dans le recadrage.</li>
+        </ul>
+        <p>Ajoutée à l’écran d’accueil, l’app s’ouvre en plein écran.</p>
+      </section>
+
+      <section id="raccourcis">
+        <h2><span class="n">12</span><span>Raccourcis clavier</span></h2>
+        <div class="tbl"><table>
+          <thead><tr><th>Touche</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><kbd>Espace</kbd></td><td>Lecture / pause</td></tr>
+            <tr><td><kbd>K</kbd></td><td>Poser ou retirer une clé, à l’instant courant, sur le dernier curseur ou la dernière couleur touchés</td></tr>
+            <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Reculer / avancer d’une image (<kbd>Maj</kbd> : 10 images)</td></tr>
+            <tr><td><kbd>Suppr</kbd> ou <kbd>Retour arrière</kbd></td><td>Supprimer la clé sélectionnée dans la frise</td></tr>
+            <tr><td><kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>Z</kbd></td><td>Annuler</td></tr>
+            <tr><td><kbd>Ctrl</kbd> / <kbd>⌘</kbd> + <kbd>Maj</kbd> + <kbd>Z</kbd></td><td>Rétablir</td></tr>
+            <tr><td><kbd>Échap</kbd></td><td>Fermer une boîte de dialogue ou un panneau</td></tr>
+          </tbody>
+        </table></div>
+        <p>Les raccourcis à une touche sont ignorés pendant la saisie dans un champ texte et pendant un export.</p>
+      </section>
+
+      <section id="faq">
+        <h2><span class="n">13</span><span>FAQ et limites</span></h2>
+        <h3>Mes fichiers sont-ils envoyés quelque part ?</h3>
+        <p>Non. Images et vidéos sont lues, animées et encodées dans ton navigateur ; rien n’est envoyé sur un serveur. Seules les polices de l’interface (Instrument Sans, Instrument Serif, DM Mono, Clash Display) sont chargées depuis un service de polices en ligne ; hors ligne, des polices de secours prennent le relais.</p>
+        <h3>J’ai importé mes images mais je vois toujours les exemples</h3>
+        <p>Tes fichiers sont allés après les 12 emplacements d’exemple. Clique sur <em>Tout vider</em>, puis importe à nouveau, ou dépose chaque fichier sur un emplacement.</p>
+        <h3>Ma vidéo exportée n’a pas de son</h3>
+        <p>C’est normal : Motion Lab ne gère pas le son.</p>
+        <h3>Ma vidéo source ne boucle pas pile</h3>
+        <p>Une vidéo dans un emplacement se répète sur sa propre durée. Pour une boucle parfaite, choisis une durée de boucle multiple de la durée de la vidéo.</p>
+        <h3>L’export est lent</h3>
+        <p>Chaque image est recalculée en pleine définition. La 4K, la 8K et les 60 images/s demandent beaucoup plus de calcul ; sur une machine sans carte graphique rapide, préfère 1080p à 30 images/s.</p>
+        <h3>Deux cartes se recouvrent dans le mauvais ordre</h3>
+        <p>Les cartes sont triées carte par carte, pas pixel par pixel : avec des réglages extrêmes, deux cartes qui se croisent peuvent mal se superposer. Réduis la rotation ou l’écart.</p>
+        <h3>Certains modèles débordent du cadre</h3>
+        <p>C’est voulu pour quelques-uns (Ticker incliné, Cascade iso, Grande roue). Règle le zoom ou la marge dans l’onglet Style.</p>
+      </section>
+
+      <section id="agents">
+        <h2><span class="n">14</span><span>Agents IA</span></h2>
+        <p>Motion Lab peut être piloté par un agent (Claude Code, Codex…) par son interface : il n’y a pas d’API JavaScript publique, mais les commandes clés ont des identifiants stables. Le mode d’emploi complet est sur la page <a href="agent/index.html">Agents IA</a> et dans <a href="AGENTS.md">AGENTS.md</a> (français puis anglais).</p>
+      </section>
+
+    </article>
+  </div>
+</main>
+<footer class="foot doc-foot">
+  <div class="in-w foot-in">
+    <span class="foot-l"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="6" width="9" height="12" rx="2.2" fill="none" stroke="#111" stroke-width="2"/><rect x="11.5" y="6" width="9" height="12" rx="2.2" fill="#111" transform="rotate(12 16 12)"/><circle cx="18.6" cy="5.2" r="2" fill="#ff5500"/></svg>Motion Lab · by binks design</span>
+    <ul class="foot-r">
+      <li><a href="docs.html">Documentation</a></li>
+      <li><a href="agent/index.html">Agents IA</a></li>
+      <li><a href="mailto:graphistedubinks@gmail.com">graphistedubinks@gmail.com</a></li>
+      <li><a class="pillk" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">Instagram @graphiste.binks</a></li>
+    </ul>
+    <small>Gratuit, sans compte, tout est calculé dans ton navigateur. Polices de ces pages : Clash Display (<a href="assets/fonts/ClashDisplay-FFL.txt">licence FFL</a>) et Instrument Sans (<a href="assets/fonts/InstrumentSans-OFL.txt">licence OFL</a>). Visuels d’exemple de l’app et des captures : Binks Design.</small>
+  </div>
+</footer>
+</div>
+</body>
+</html>
