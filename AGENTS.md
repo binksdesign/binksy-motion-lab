@@ -41,7 +41,7 @@ const info = await BinksyAPI.describe(); // { app, version, apiVersion: "1", des
 | `motionlab_ouvrir_projet` | `BinksyAPI.openProject()` | Ouvre un projet enregistré (avec ses médias). |
 | `motionlab_reset` | `BinksyAPI.reset()` | Remet la session par défaut (confirm: true après accord). |
 
-Les médias importés ne sont pas gardés dans la session automatique (seuls les réglages le sont) : appelle motionlab_enregistrer_projet pour les retrouver au rechargement (motionlab_ouvrir_projet). Les visuels d’exemple sont marqués example: true dans get_state : ne les livre jamais.
+Les médias importés (emplacements, fond, logo) sont gardés automatiquement dans le navigateur (IndexedDB) avec les réglages : au rechargement, tout revient tel quel. motionlab_enregistrer_projet sert à garder une version nommée en plus de la session en cours. Les visuels d’exemple sont marqués example: true dans get_state : ne les livre jamais.
 
 Découvrir les outils :
 
@@ -222,11 +222,12 @@ Après la dernière clé, l’interpolation revient vers la première : la boucl
 
 | Où | Clé | Contenu |
 |---|---|---|
-| `localStorage` | `motionlab.session` | Session courante **sans les médias** : modèle, format, réglages, fond, durée, textes, logo (position, taille), images clés. Ignorée avec `?fresh`. |
+| `localStorage` | `motionlab.session` | Session courante : modèle, format, réglages, fond, durée, textes, logo (position, taille), images clés, et les identifiants des médias utilisés (`mediaV: 1`). Ignorée avec `?fresh`. |
+| IndexedDB | base `motionlab-autosave`, magasin `media` (clé `id` = id du média) | Médias de la session en cours : `{ id, type, name, blob }` (visuels d’exemple : `{ id, demo }`, recréés sans copie). Restaurés au démarrage **avant** les réglages, supprimés dès qu’ils ne sont plus utilisés (vider, remplacer, retirer le logo / fond, reset). Stockage plein : petit message, l’app continue. |
 | IndexedDB | base `motionlab`, magasin `projects` (clé `id`) | Projets enregistrés : `{ id, name, date, state, media: [{ id, type, name, blob }], thumb }`. |
 | Fichier | `<nom>.json` (Mes projets → Exporter .json) | `{ app: "motion-lab", v: 1, state, media: [{ id, type, name, data }] }`, médias en data URL. |
 
-Au rechargement, les emplacements reprennent les visuels d’exemple : pour garder les médias de l’utilisateur, enregistre le projet (`#saveBtn`) ou exporte le `.json`. Annuler / rétablir : 120 étapes, non conservées au rechargement.
+Au rechargement, les médias de l’utilisateur et les réglages reviennent tels quels (les visuels d’exemple ne s’affichent qu’à la première visite ou avec `?fresh`). Enregistre le projet (`#saveBtn`) ou exporte le `.json` pour en garder une version nommée ou l’emporter ailleurs. Annuler / rétablir : 120 étapes, non conservées au rechargement.
 
 ## 8. Vérifications avant de rendre le travail
 
@@ -289,7 +290,7 @@ It lives in two places, always identical: `AGENTS.md` (Markdown, French then Eng
 | `motionlab_ouvrir_projet` | `BinksyAPI.openProject()` | Opens a saved project (with media). |
 | `motionlab_reset` | `BinksyAPI.reset()` | Resets the session (confirm: true). |
 
-Imported media are not kept in the automatic session (only settings are): call motionlab_enregistrer_projet to get them back after a reload (motionlab_ouvrir_projet). Example visuals are flagged example: true in get_state: never deliver them.
+Imported media (slots, background, logo) are auto-saved in the browser (IndexedDB) along with the settings: after a reload everything comes back as it was. motionlab_enregistrer_projet keeps a named version on top of the current session. Example visuals are flagged example: true in get_state: never deliver them.
 
 * Claude Code / Codex / Hermes / OpenCode: Playwright MCP server (`npx @playwright/mcp@latest`), open `https://motion.binksdesign.com/app.html`, then call `window.BinksyAPI` through `browser_evaluate`, starting with `await BinksyAPI.describe()`.
 * Browser agent: Chrome 146+ with `chrome://flags/#enable-webmcp-testing` (experimental); tools show up by themselves.
@@ -443,11 +444,12 @@ After the last key, interpolation goes back to the first one: the loop stays sea
 
 | Where | Key | Content |
 |---|---|---|
-| `localStorage` | `motionlab.session` | Current session **without media**: template, format, settings, background, duration, texts, logo (position, size), keyframes. Ignored with `?fresh`. |
+| `localStorage` | `motionlab.session` | Current session: template, format, settings, background, duration, texts, logo (position, size), keyframes, plus the ids of the media in use (`mediaV: 1`). Ignored with `?fresh`. |
+| IndexedDB | database `motionlab-autosave`, store `media` (key `id` = media id) | Media of the current session: `{ id, type, name, blob }` (example visuals: `{ id, demo }`, rebuilt without a copy). Restored at startup **before** the settings, deleted as soon as they are no longer used (clear, replace, remove logo / background, reset). Storage full: small notice, the app keeps working. |
 | IndexedDB | database `motionlab`, store `projects` (key `id`) | Saved projects: `{ id, name, date, state, media: [{ id, type, name, blob }], thumb }`. |
 | File | `<name>.json` (Mes projets → Exporter .json) | `{ app: "motion-lab", v: 1, state, media: [{ id, type, name, data }] }`, media as data URLs. |
 
-On reload, slots go back to the example visuals: to keep the user’s media, save the project (`#saveBtn`) or export the `.json`. Undo / redo: 120 steps, not kept across reloads.
+On reload, the user’s media and settings come back as they were (example visuals only show on first visit or with `?fresh`). Save the project (`#saveBtn`) or export the `.json` to keep a named version or take it elsewhere. Undo / redo: 120 steps, not kept across reloads.
 
 ## 8. Checks before handing back
 

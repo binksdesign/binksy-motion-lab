@@ -4232,6 +4232,7 @@ const st = {
   keys: {}, name: 'Sans titre',
 };
 const MEDIA = {}; let mediaN = 1;
+let booting = true; /* vrai tant que la session (médias puis réglages) n'est pas restaurée : aucune sauvegarde avant */
 let curT = 0, playing = true, lastTs = 0, dirty = true, exporting = false, cancelExport = false;
 let selKey = null, selLayer = null, lastParam = null;
 const R = new Renderer();
@@ -4555,11 +4556,12 @@ async function addFiles(files, start = null, replace = false) {
     } catch (err) { console.error(err); toast("Ce fichier n'a pas pu être lu."); }
   }
   afterMedia(); toast('Médias ajoutés');
+  await persistNow();
 }
 function afterMedia() { renderMedia(); commit(); dirty = true; queueThumbs(); if (playing) for (const m of usedVideos()) m.el.play().catch(() => {}); }
 let demoCache = null;
 async function loadDemo() {
-  if (!demoCache) { const d = await buildDemoMedia(); demoCache = { items: d.items.map((c, i) => mediaFromCanvas(c instanceof HTMLImageElement ? null || toCanvas(c) : c, 'exemple-' + (i + 1))), logo: d.logo ? mediaFromCanvas(d.logo, 'binks-design') : null }; }
+  if (!demoCache) { const d = await buildDemoMedia(); demoCache = { items: d.items.map((c, i) => mediaFromCanvas(c instanceof HTMLImageElement ? null || toCanvas(c) : c, 'exemple-' + (i + 1))), logo: d.logo ? mediaFromCanvas(d.logo, 'binks-design') : null }; markDemo(); }
   while (st.slots.length < demoCache.items.length) st.slots.push(newSlot());
   demoCache.items.forEach((m, i) => Object.assign(st.slots[i], { m: m.id, z: 1, x: 0, y: 0 }));
   afterMedia();
@@ -4639,7 +4641,7 @@ function renderStyle() {
   refreshKBtns(paneS);
 }
 bindControls(paneS);
-$('#bgIn').onchange = async (e) => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const m = await mediaFromBlob(f, f.name, 'image'); st.bg.img = m.id; st.bg.type = 'image'; renderStyle(); commit(); dirty = true; queueThumbs(); };
+$('#bgIn').onchange = async (e) => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const m = await mediaFromBlob(f, f.name, 'image'); st.bg.img = m.id; st.bg.type = 'image'; renderStyle(); commit(); dirty = true; queueThumbs(); persistNow(); };
 
 /* ───────── Onglet Texte ───────── */
 const paneT = $('#pane-text'); let txN = 1;
@@ -4681,8 +4683,10 @@ paneT.addEventListener('click', (e) => {
 });
 paneT.addEventListener('input', (e) => { const f = e.target.dataset.f, card = e.target.closest('[data-tx]'); if (!card || !f) return; const t = st.texts.find(x => x.id === card.dataset.tx); t[f] = e.target.value; if (f === 'text') { const h = card.querySelector('.lc-h span'); h.textContent = t.text.split('\n')[0].slice(0, 22) || 'Texte'; } dirty = true; });
 paneT.addEventListener('change', (e) => { if (e.target.dataset.f) { if (e.target.dataset.f === 'font') { const t = st.texts.find(x => x.id === e.target.closest('[data-tx]').dataset.tx); document.fonts.load(`${t.weight} 40px ${FONTS[t.font]}`).then(() => dirty = true); } commit(); } });
-async function loadDemoMediaOnly() { const d = await buildDemoMedia(); demoCache = { items: d.items.map((c, i) => mediaFromCanvas(c instanceof HTMLImageElement ? toCanvas(c) : c, 'exemple-' + (i + 1))), logo: d.logo ? mediaFromCanvas(d.logo, 'binks-design') : null }; }
-$('#logoIn').onchange = async (e) => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const m = await mediaFromBlob(f, f.name, 'image'); st.logo.m = m.id; renderText(); commit(); dirty = true; };
+async function loadDemoMediaOnly() { const d = await buildDemoMedia(); demoCache = { items: d.items.map((c, i) => mediaFromCanvas(c instanceof HTMLImageElement ? toCanvas(c) : c, 'exemple-' + (i + 1))), logo: d.logo ? mediaFromCanvas(d.logo, 'binks-design') : null }; markDemo(); }
+/* les visuels d'exemple ne sont pas copiés dans IndexedDB : on retient seulement leur rang pour les recréer au rechargement */
+function markDemo() { demoCache.items.forEach((m, i) => { m.demoIdx = i; }); if (demoCache.logo) demoCache.logo.demoIdx = 'logo'; }
+$('#logoIn').onchange = async (e) => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; const m = await mediaFromBlob(f, f.name, 'image'); st.logo.m = m.id; renderText(); commit(); dirty = true; persistNow(); };
 
 /* déplacer textes et logo sur l'image */
 (() => {
@@ -4743,12 +4747,17 @@ $('#kfBar').addEventListener('click', (e) => {
 const hist = [], redo = []; let commitT = 0, lastSnap = '';
 const snap = () => JSON.stringify(st);
 function commit() { clearTimeout(commitT); commitT = setTimeout(() => { const s = snap(); if (s === lastSnap) return; if (lastSnap) hist.push(lastSnap); if (hist.length > 120) hist.shift(); redo.length = 0; lastSnap = s; updUndo(); saveSession(); }, 220); }
-function restore(s) { const o = JSON.parse(s); for (const k of Object.keys(st)) delete st[k]; Object.assign(st, o); lastSnap = s; selKey = null; renderAll(); dirty = true; queueThumbs(); updUndo(); }
+function restore(s) { const o = JSON.parse(s); for (const k of Object.keys(st)) delete st[k]; Object.assign(st, o); lastSnap = s; selKey = null; renderAll(); dirty = true; queueThumbs(); updUndo(); saveSession(); }
 function updUndo() { $('#undoBtn').disabled = !hist.length; $('#redoBtn').disabled = !redo.length; }
 $('#undoBtn').onclick = () => { if (!hist.length) return; redo.push(lastSnap); restore(hist.pop()); };
 $('#redoBtn').onclick = () => { if (!redo.length) return; hist.push(lastSnap); restore(redo.pop()); };
 function renderAll() { renderRatios(); renderMedia(); renderStyle(); renderText(); renderTracks(); $$('.tpl').forEach(x => x.classList.toggle('on', x.dataset.id === st.tpl)); layoutView(); }
-let sessT = 0; function saveSession() { clearTimeout(sessT); sessT = setTimeout(() => { try { const o = JSON.parse(snap()); o.slots = o.slots.map(s => ({ ...s, m: null })); o.bg.img = null; o.logo.m = null; localStorage.setItem('motionlab.session', JSON.stringify(o)); } catch (e) {} }, 800); }
+/* session : réglages dans localStorage (avec les références des médias), médias eux-mêmes dans IndexedDB (AUTO, plus bas) */
+function sessionJSON() { const o = JSON.parse(snap()); o.mediaV = 1; return JSON.stringify(o); }
+function writeSession() { if (booting) return; clearTimeout(sessT); sessT = 0; try { localStorage.setItem('motionlab.session', sessionJSON()); } catch (e) {} }
+function persistNow() { if (booting) return Promise.resolve(); writeSession(); return AUTO.save(); }
+let sessT = 0; function saveSession() { if (booting) return; clearTimeout(sessT); sessT = setTimeout(() => { writeSession(); AUTO.save(); }, 800); }
+addEventListener('pagehide', () => { if (sessT) writeSession(); });
 
 /* ───────── Raccourcis clavier ───────── */
 addEventListener('keydown', (e) => {
@@ -4774,6 +4783,44 @@ $('#modal').addEventListener('pointerdown', (e) => { if (e.target.id === 'modal'
 /* ───────── Projets (IndexedDB + .json) ───────── */
 const idb = () => new Promise((ok, ko) => { const r = indexedDB.open('motionlab', 1); r.onupgradeneeded = () => r.result.createObjectStore('projects', { keyPath: 'id' }); r.onsuccess = () => ok(r.result); r.onerror = () => ko(r.error); });
 async function idbDo(mode, fn) { const db = await idb(); return new Promise((ok, ko) => { const tx = db.transaction('projects', mode), s = tx.objectStore('projects'); const r = fn(s); tx.oncomplete = () => ok(r && r.result); tx.onerror = () => ko(tx.error); }); }
+/* ───────── Auto-save des médias importés (IndexedDB, base « motionlab-autosave », 100 % local) ───────── */
+const AUTO = (() => {
+  const DB = 'motionlab-autosave', ST = 'media'; let dbP = null, chain = Promise.resolve(), warned = false; const stored = new Set(), full = new Set();
+  const open = () => dbP || (dbP = new Promise((ok, ko) => { let r; try { r = indexedDB.open(DB, 1); } catch (e) { ko(e); return; } r.onupgradeneeded = () => r.result.createObjectStore(ST, { keyPath: 'id' }); r.onsuccess = () => ok(r.result); r.onerror = () => ko(r.error); r.onblocked = () => ko(new Error('base bloquée')); }).catch(e => { dbP = null; throw e; }));
+  async function run(mode, fn) { const db = await open(); return new Promise((ok, ko) => { const tx = db.transaction(ST, mode), s = tx.objectStore(ST); const r = fn(s); tx.oncomplete = () => ok(r && r.result); tx.onerror = tx.onabort = () => ko(tx.error || (r && r.error) || new Error('transaction annulée')); }); }
+  const isQuota = e => !!e && (e.name === 'QuotaExceededError' || e.code === 22 || /quota/i.test(e.message || ''));
+  function warn(e) { if (isQuota(e)) { if (!warned) { warned = true; toast('Stockage du navigateur plein : certains médias ne reviendront pas au rechargement.'); } } else console.warn('[Motion Lab] auto-save des médias :', e); }
+  async function loadAll() { try { const all = await run('readonly', s => s.getAll()) || []; stored.clear(); all.forEach(r => stored.add(r.id)); return all; } catch (e) { warn(e); return []; } }
+  async function sync() {
+    if (booting) return; const used = usedMediaIds(), want = new Set(used);
+    for (const id of used) {
+      if (stored.has(id) || full.has(id)) continue; const m = MEDIA[id];
+      try { const rec = m.demoIdx != null ? { id, demo: m.demoIdx, type: m.type, name: m.name } : { id, type: m.type, name: m.name, blob: await mediaBlob(m) }; await run('readwrite', s => s.put(rec)); stored.add(id); }
+      catch (e) { if (isQuota(e)) full.add(id); warn(e); }
+    }
+    for (const id of [...stored]) if (!want.has(id)) { try { await run('readwrite', s => s.delete(id)); stored.delete(id); } catch (e) { warn(e); } }
+    for (const id of [...full]) if (!want.has(id)) full.delete(id);
+  }
+  const save = () => (chain = chain.then(sync, sync).catch(warn));
+  return { loadAll, save };
+})();
+/* au démarrage : les médias d'abord (mêmes identifiants), puis les réglages de la session */
+async function restoreSession() {
+  let s = null; try { s = JSON.parse(localStorage.getItem('motionlab.session') || 'null'); } catch (e) {}
+  if (!s || !s.tpl || /[?&]fresh/.test(location.search)) return false;
+  const v = !!s.mediaV, recs = v ? await AUTO.loadAll() : [], map = {};
+  const nums = recs.map(r => +String(r.id).replace(/^m/, '')).filter(n => n > 0); if (nums.length) mediaN = Math.max(mediaN, ...nums) + 1;
+  for (const r of recs) if (r.blob instanceof Blob) { try { await mediaFromBlob(r.blob, r.name, r.type, r.id); map[r.id] = r.id; } catch (e) { console.warn('[Motion Lab] média non restauré :', r.name, e); } }
+  if (recs.some(r => r.demo != null)) { try { if (!demoCache) await loadDemoMediaOnly(); for (const r of recs) if (r.demo != null) { const m = r.demo === 'logo' ? demoCache.logo : demoCache.items[r.demo]; if (m) map[r.id] = m.id; } } catch (e) {} }
+  const ref = id => (v && id && map[id]) || null;
+  migrate(s); delete s.mediaV;
+  const old = Array.isArray(s.slots) ? s.slots : [];
+  s.slots = Array.from({ length: Math.max(old.length, 12) }, (_, i) => v && old[i] ? { ...newSlot(), ...old[i], m: ref(old[i].m) } : newSlot());
+  s.bg = { ...st.bg, ...(s.bg || {}), img: ref(s.bg && s.bg.img) }; s.logo = { ...st.logo, ...(s.logo || {}), m: ref(s.logo && s.logo.m) };
+  Object.assign(st, s); txN = 1 + Math.max(0, ...st.texts.map(t => +t.id.slice(1) || 0)); renderAll(); dirty = true; queueThumbs();
+  if (playing) for (const m of usedVideos()) m.el.play().catch(() => {});
+  return v;
+}
 function usedMediaIds() { const s = new Set(st.slots.map(x => x.m).filter(Boolean)); if (st.bg.img) s.add(st.bg.img); if (st.logo.m) s.add(st.logo.m); return [...s].filter(id => MEDIA[id]); }
 function projThumb() { const c = document.createElement('canvas'); c.width = 320; c.height = Math.round(320 / frameDims()); compose(c.getContext('2d'), c.width, c.height, curT); return c.toDataURL('image/jpeg', 0.8); }
 let projId = null;
@@ -4793,6 +4840,7 @@ async function loadProjectData(rec) {
   migrate(o);
   hist.length = 0; redo.length = 0; for (const k of Object.keys(st)) delete st[k]; Object.assign(st, o); lastSnap = snap(); txN = 1 + Math.max(0, ...st.texts.map(t => +t.id.slice(1) || 0));
   selKey = null; selLayer = null; renderAll(); updUndo(); queueThumbs(); dirty = true; if (playing) setPlaying(true);
+  persistNow();
 }
 async function openProjects() {
   let list = []; try { list = await idbDo('readonly', s => s.getAll()) || []; } catch (e) {}
@@ -5115,7 +5163,6 @@ if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) do
 
 /* ───────── Démarrage ───────── */
 renderRatios(); renderLib(); renderMedia(); renderStyle(); renderText(); renderTracks(); updUndo(); applyMode();
-try { const s = JSON.parse(localStorage.getItem('motionlab.session') || 'null'); if (s && s.tpl && !/[?&]fresh/.test(location.search)) { migrate(s); const slotsN = s.slots ? s.slots.length : 12; Object.assign(st, s); st.slots = Array.from({ length: Math.max(slotsN, 12) }, newSlot); txN = 1 + Math.max(0, ...st.texts.map(t => +t.id.slice(1) || 0)); renderAll(); } } catch (e) {}
 lastSnap = snap();
 requestAnimationFrame(loop);
 /* ── API pour agents IA : window.BinksyAPI + outils WebMCP (une seule table de définitions) ── */
@@ -5173,7 +5220,7 @@ requestAnimationFrame(loop);
       output: { ...OUT }, exporting,
     };
   }
-  const saveNow = () => { commit(); try { const o = JSON.parse(snap()); o.slots = o.slots.map(s => ({ ...s, m: null })); o.bg.img = null; o.logo.m = null; localStorage.setItem('motionlab.session', JSON.stringify(o)); } catch (e) { } };
+  const saveNow = () => { commit(); persistNow(); };
   const done = () => { saveNow(); return getState(); };
   const PATH_RE = /^(tp\.[\w-]+\.[\w-]+|bg\.(c1|c2|angle)|logo\.(size|opacity|x|y)|tx\.t\d+\.(size|color|opacity|pos|text|font|weight|align|x|y))$/;
   const checkPath = p => { if (!PATH_RE.test(p)) throw fail('BAD_PATH', `Chemin « ${p} » inconnu. Exemples : tp.<modèle>.<réglage>, bg.c1, bg.c2, bg.angle, logo.size, tx.t1.color.`); const s = p.split('.'); if (s[0] === 'tp' && !pdef(TPL[s[1]], s[2])) throw fail('BAD_PATH', `Réglage « ${s[2]} » inconnu pour le modèle ${s[1]} (voir lire_modele).`); if (s[0] === 'tx' && !st.texts.some(t => t.id === s[1])) throw fail('UNKNOWN_TEXT', `Calque texte « ${s[1]} » introuvable.`); };
@@ -5203,13 +5250,13 @@ requestAnimationFrame(loop);
       if (image) { const f = await toFile(image); if (!/^image\//.test(f.type)) throw fail('UNSUPPORTED', 'Le fond doit être une image.'); const m = await mediaFromBlob(f, f.name, 'image'); st.bg.img = m.id; st.bg.type = 'image'; }
       if (type) st.bg.type = type;
       if (color1) applyVal('bg.c1', coerce('bg.c1', color1)); if (color2) applyVal('bg.c2', coerce('bg.c2', color2)); if (angle != null) applyVal('bg.angle', Math.max(0, Math.min(360, +angle)));
-      renderStyle(); dirty = true; queueThumbs(); return done();
+      renderStyle(); dirty = true; queueThumbs(); const state = done(); await persistNow(); return state;
     },
     async importer({ files, slot, replace = false, clearFirst = false } = {}) {
       if (!Array.isArray(files) || !files.length) throw fail('NO_FILES', 'Donne files: [{ name, type, dataBase64 | url (data:) }].');
       const fl = await Promise.all(files.map(toFile));
       const proj = fl.filter(f => /json/.test(f.type) || /\.json$/i.test(f.name));
-      if (proj.length) { let o; try { o = JSON.parse(await proj[0].text()); } catch (e) { throw fail('BAD_PROJECT', 'Ce fichier n\'est pas un projet Motion Lab.'); } if (!o || !o.state) throw fail('BAD_PROJECT', 'Ce fichier n\'est pas un projet Motion Lab.'); projId = null; await loadProjectData(o); toast('Projet importé'); return { project: true, state: done() }; }
+      if (proj.length) { let o; try { o = JSON.parse(await proj[0].text()); } catch (e) { throw fail('BAD_PROJECT', 'Ce fichier n\'est pas un projet Motion Lab.'); } if (!o || !o.state) throw fail('BAD_PROJECT', 'Ce fichier n\'est pas un projet Motion Lab.'); projId = null; await loadProjectData(o); toast('Projet importé'); const state = done(); await persistNow(); return { project: true, state }; }
       const media = fl.filter(f => /^(image|video)\//.test(f.type));
       if (media.length !== fl.length) throw fail('UNSUPPORTED', 'Formats acceptés : images (PNG, JPEG, WebP, SVG…), vidéos (MP4, WebM…), ou un projet .json.');
       if (clearFirst) { st.slots.forEach(s => Object.assign(s, newSlot())); }
@@ -5218,7 +5265,7 @@ requestAnimationFrame(loop);
       await addFiles(media, slot != null ? +slot : null, !!replace);
       const changedIdx = st.slots.map((s, i) => s.m && s.m !== before[i] ? i : -1).filter(i => i >= 0);
       if (!changedIdx.length) throw fail('IMPORT_FAILED', 'Ce fichier n\'a pas pu être lu.');
-      return { slots: changedIdx, state: done() };
+      const state = done(); await persistNow(); return { slots: changedIdx, state };
     },
     async clearSlots({ slots } = {}) { const list = slots && slots.length ? slots : st.slots.map((_, i) => i); for (const i of list) if (st.slots[i]) Object.assign(st.slots[i], newSlot()); afterMedia(); return done(); },
     async loadExamples() { await loadDemo(); return done(); },
@@ -5234,7 +5281,7 @@ requestAnimationFrame(loop);
       if (file) { const f = await toFile(file); if (!/^image\//.test(f.type)) throw fail('UNSUPPORTED', 'Logo : PNG ou SVG.'); const m = await mediaFromBlob(f, f.name, 'image'); st.logo.m = m.id; }
       if (x != null) st.logo.x = Math.max(0, Math.min(1, +x)); if (y != null) st.logo.y = Math.max(0, Math.min(1, +y));
       if (size != null) applyVal('logo.size', +size); if (opacity != null) applyVal('logo.opacity', Math.max(0, Math.min(1, +opacity)));
-      renderText(); dirty = true; return done();
+      renderText(); dirty = true; const state = done(); await persistNow(); return state;
     },
     async setKeyframe({ path, time, value, ease, remove = false } = {}) {
       checkPath(path); const t = +time; if (!(t >= 0 && t < 1)) throw fail('BAD_TIME', 'time = position dans la boucle, de 0 (début) à 1 exclu.');
@@ -5301,7 +5348,11 @@ requestAnimationFrame(loop);
   publish('motion-lab', APPV, 'Motion Lab (Binks Design) : anime les visuels de l\'utilisateur avec 258 modèles (3D, carrousels, grilles, révélations…), format, fond, textes, logo et images clés, puis exporte en MP4, WebM ou PNG. 100 % local : rien n\'est envoyé.', TOOLS, M, ready,
     { listerModeles: 'listTemplates', lireModele: 'getTemplate', choisirModele: 'selectTemplate', choisirFormat: 'setRatio', duree: 'setDuration', regler: 'setValues', fond: 'setBackground', ajouterTexte: 'addText', logo: 'setLogo', imageCle: 'setKeyframe', enregistrerProjet: 'saveProject' });
 })();
-loadDemo().then(() => { lastSnap = snap(); hist.length = 0; updUndo(); window.ML_READY = true; });
+(async () => {
+  let had = false; try { had = await restoreSession(); } catch (e) { console.warn('[Motion Lab] restauration de la session :', e); }
+  if (!had) await loadDemo();
+  lastSnap = snap(); hist.length = 0; updUndo(); booting = false; persistNow(); window.ML_READY = true;
+})();
 window.ML = { st, TPL, TEMPLATES, compose, mediaFromCanvas, R, val, nImgOf, pathSet, pathGet, renderStyle, renderMedia, setKey, toggleKey, selectTpl, runExport, OUT, MEDIA, loadDemo, setPlaying, get t() { return curT; }, set t(v) { curT = v; dirty = true; }, buildCards, outDims, addFiles, MOB, openSheet, closeSheet, applyMode };
 })();
 </script>
