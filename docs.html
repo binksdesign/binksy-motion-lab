@@ -13,12 +13,13 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Cg transform='translate%284 4%29'%3E%3Crect x='3.5' y='6' width='9' height='12' rx='2.2' fill='none' stroke='%23f2f2f0' stroke-width='2'/%3E%3Crect x='11.5' y='6' width='9' height='12' rx='2.2' fill='%23f2f2f0' transform='rotate%2812 16 12%29'/%3E%3Ccircle cx='18.6' cy='5.2' r='2' fill='%23ff5500'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="alternate" type="text/markdown" href="AGENTS.md" title="Mode d’emploi pour agents IA (Markdown, FR puis EN)">
 <link rel="help" href="agent/" title="Agents IA">
+<link rel="help" href="mcp/" title="MCP / Agents IA">
 <link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt">
 <link rel="stylesheet" href="assets/site.css">
 <script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)document.documentElement.classList.add('anim');</script>
 <script src="assets/site.js" defer></script>
 </head>
-<!-- Agents IA / AI agents : lisez AGENTS.md (Markdown, français puis anglais) ou agent/index.html avant d’agir. L’application est app.html ; pas d’API JavaScript publique : pilotage par l’interface (#fileIn, #ratios, .tpl[data-id], #exportBtn…). Aucune clé API, tout est calculé dans le navigateur. -->
+<!-- Agents IA / AI agents : lisez AGENTS.md (Markdown, français puis anglais) ou agent/index.html avant d’agir. L’application est app.html ; API JavaScript window.BinksyAPI + outils WebMCP (page mcp/), ou pilotage par l’interface (#fileIn, #ratios, .tpl[data-id], #exportBtn…). Aucune clé API, tout est calculé dans le navigateur. -->
 <body>
 <a class="skip" href="#contenu">Aller au contenu</a>
 <noscript><p style="margin:0;padding:10px 18px;background:#ff5500;color:#0b0b0b;font:600 14px/1.4 sans-serif">Agents IA : le mode d’emploi complet est dans <a href="AGENTS.md">AGENTS.md</a> (page HTML : <a href="agent/index.html">agent/</a>). L’application (<a href="app.html">app.html</a>) a besoin de JavaScript et de WebGL2.</p></noscript>
@@ -267,7 +268,7 @@
 
       <section id="agents">
         <h2><span class="n">14</span><span>Agents IA</span></h2>
-        <p>Motion Lab peut être piloté par un agent (Claude Code, Codex…) par son interface : il n’y a pas d’API JavaScript publique, mais les commandes clés ont des identifiants stables. Le mode d’emploi complet est sur la page <a href="agent/index.html">Agents IA</a> et dans <a href="AGENTS.md">AGENTS.md</a> (français puis anglais).</p>
+        <p>Motion Lab peut être piloté par un agent (Claude Code, Codex…) sans cliquer grâce à l’API JavaScript <code>window.BinksyAPI</code> et aux outils WebMCP (page <a href="mcp/index.html">MCP / Agents IA</a>), ou par son interface, dont les commandes clés ont des identifiants stables. Le mode d’emploi complet est sur la page <a href="agent/index.html">Agents IA</a> et dans <a href="AGENTS.md">AGENTS.md</a> (français puis anglais).</p>
       </section>
 
     </article>
@@ -279,6 +280,7 @@
     <ul class="foot-r">
       <li><a href="docs.html">Documentation</a></li>
       <li><a href="agent/index.html">Agents IA</a></li>
+      <li><a href="mcp/index.html">MCP / Agents IA</a></li>
       <li><a href="mailto:graphistedubinks@gmail.com">graphistedubinks@gmail.com</a></li>
       <li><a class="pillk" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">Instagram @graphiste.binks</a></li>
     </ul>

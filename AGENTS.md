@@ -4,7 +4,78 @@ Ce document s’adresse aux agents IA (Claude Code, Codex, ou tout agent qui pil
 
 Il existe en deux endroits, toujours identiques : `AGENTS.md` (Markdown, français puis anglais) et la page `agent/index.html`. Résumé court : `llms.txt`. Documentation pour les humains : `docs.html`.
 
-**Important : Motion Lab n’a pas d’API JavaScript publique.** On le pilote par son interface, avec les sélecteurs réels décrits plus bas. N’invente pas de fonction qui n’existe pas.
+**Important : Motion Lab a une API JavaScript publique, `window.BinksyAPI`, et les mêmes outils en WebMCP (section 0, page `mcp/`).** Préfère-la ; l’interface reste pilotable avec les sélecteurs réels décrits plus bas. N’invente pas de fonction qui n’existe pas : la liste à jour est `await BinksyAPI.describe()`.
+
+## 0. API pour agents : `window.BinksyAPI`, WebMCP et page `/mcp/`
+
+**Préfère cette API à l’interface.** Une fois l’app prête, `window.BinksyAPI` expose des méthodes asynchrones qui renvoient du JSON (jamais de nœud DOM) et appellent la même logique que l’interface : l’écran se met à jour et l’enregistrement automatique (IndexedDB) suit. Une erreur est rejetée avec `{ code, message }`. Les mêmes outils sont enregistrés en **WebMCP** (`document.modelContext.registerTool`, repli `navigator.modelContext`) quand le navigateur le permet ; une seule table de définitions sert les deux. Page de connexion : `mcp/` (https://motion.binksdesign.com/mcp/).
+
+```js
+await BinksyAPI.ready();
+const info = await BinksyAPI.describe(); // { app, version, apiVersion: "1", description, tools: [...] }
+```
+
+| Outil WebMCP | Méthode | Rôle |
+|---|---|---|
+| `motionlab_describe` | `BinksyAPI.describe()` | Décrit l’app et la liste des outils. |
+| `motionlab_get_state` | `BinksyAPI.getState()` | Lit l’état : modèle, format, durée, emplacements, fond, textes, logo, images clés. |
+| `motionlab_lister_modeles` | `BinksyAPI.listTemplates()` | Liste / cherche les 258 modèles. |
+| `motionlab_lire_modele` | `BinksyAPI.getTemplate()` | Réglages d’un modèle (chemins, bornes, options). |
+| `motionlab_choisir_modele` | `BinksyAPI.selectTemplate()` | Choisit le modèle. |
+| `motionlab_choisir_format` | `BinksyAPI.setRatio()` | Format du cadre (16:9, 4:3, 1:1, 4:5, 3:4, 9:16). |
+| `motionlab_duree` | `BinksyAPI.setDuration()` | Durée de la boucle (2 à 40 s). |
+| `motionlab_nombre_images` | `BinksyAPI.setImageCount()` | Nombre d’images utilisées par le modèle. |
+| `motionlab_regler` | `BinksyAPI.setValues()` | Règle des valeurs par chemin (tp.…, bg.…, logo.…, tx.…). |
+| `motionlab_fond` | `BinksyAPI.setBackground()` | Fond couleur, dégradé ou image fournie. |
+| `motionlab_importer` | `BinksyAPI.importer()` | Importe images / vidéos dans les emplacements, ou un projet .json. |
+| `motionlab_vider` | `BinksyAPI.clearSlots()` | Vide des emplacements. |
+| `motionlab_exemples` | `BinksyAPI.loadExamples()` | Remet les visuels d’exemple (tests seulement). |
+| `motionlab_ajouter_texte` | `BinksyAPI.addText()` | Ajoute un calque texte (texte fourni / validé). |
+| `motionlab_supprimer_texte` | `BinksyAPI.removeText()` | Supprime un calque texte. |
+| `motionlab_logo` | `BinksyAPI.setLogo()` | Pose, place, règle ou retire le logo fourni. |
+| `motionlab_image_cle` | `BinksyAPI.setKeyframe()` | Pose / modifie / retire une image clé à un instant (0–1). |
+| `motionlab_temps` | `BinksyAPI.setTime()` | Tête de lecture et lecture / pause. |
+| `motionlab_exporter` | `BinksyAPI.exporter()` | Exporte MP4, WebM, PNG ou projet .json (base64). |
+| `motionlab_enregistrer_projet` | `BinksyAPI.saveProject()` | Enregistre le projet et ses médias dans le navigateur. |
+| `motionlab_lister_projets` | `BinksyAPI.listProjects()` | Liste les projets enregistrés. |
+| `motionlab_ouvrir_projet` | `BinksyAPI.openProject()` | Ouvre un projet enregistré (avec ses médias). |
+| `motionlab_reset` | `BinksyAPI.reset()` | Remet la session par défaut (confirm: true après accord). |
+
+Les médias importés ne sont pas gardés dans la session automatique (seuls les réglages le sont) : appelle motionlab_enregistrer_projet pour les retrouver au rechargement (motionlab_ouvrir_projet). Les visuels d’exemple sont marqués example: true dans get_state : ne les livre jamais.
+
+Découvrir les outils :
+
+```js
+await BinksyAPI.ready();
+(await BinksyAPI.describe()).tools.map(t => t.name);
+```
+
+Importer les visuels fournis (base64) et choisir un modèle :
+
+```js
+await BinksyAPI.importer({ clearFirst: true, files: [
+  { name: "visuel-01.jpg", type: "image/jpeg", dataBase64: "<base64 du fichier fourni>" },
+  { name: "visuel-02.jpg", type: "image/jpeg", dataBase64: "<base64>" }
+] });
+await BinksyAPI.setRatio({ ratio: "9:16" });
+await BinksyAPI.selectTemplate({ id: "cover-flow" });
+await BinksyAPI.setDuration({ seconds: 10 });
+```
+
+Exporter la vidéo MP4 1080p et garder le projet :
+
+```js
+const { files } = await BinksyAPI.exporter({ format: "mp4", resolution: 1080, fps: 30 });
+files[0].name; // sans-titre.mp4, dataBase64 = la vidéo
+await BinksyAPI.saveProject({ name: "<nom donné par l’utilisateur>" });
+```
+
+* Claude Code / Codex / Hermes / OpenCode : serveur MCP Playwright (`npx @playwright/mcp@latest`), ouvrir `https://motion.binksdesign.com/app.html`, puis appeler `window.BinksyAPI` via `browser_evaluate`.
+* Agent du navigateur : Chrome 146+ avec `chrome://flags/#enable-webmcp-testing` (expérimental) ; les outils apparaissent seuls.
+* `exporter` renvoie `{ files: [{ name, type, dataBase64 }] }` et ne télécharge rien sauf `download: true`. `reset` exige `confirm: true`, après accord de l’utilisateur.
+* Rien n’est envoyé : pas de serveur, pas de compte, pas de clé. L’API ne lit ni n’écrit aucune clé API.
+
+---
 
 ## 1. Règle fondamentale
 
@@ -186,7 +257,46 @@ This document is for AI agents (Claude Code, Codex, or any agent driving a brows
 
 It lives in two places, always identical: `AGENTS.md` (Markdown, French then English) and the `agent/index.html` page. Short summary: `llms.txt`. Human documentation (French): `docs.html`.
 
-**Important: Motion Lab has no public JavaScript API.** Drive it through its interface, with the real selectors listed below. Do not invent functions that do not exist.
+**Important: Motion Lab has a public JavaScript API, `window.BinksyAPI`, and the same tools over WebMCP (section 0, `mcp/` page).** Prefer it; the interface can still be driven with the real selectors listed below. Do not invent functions: the current list is `await BinksyAPI.describe()`.
+
+## 0. Agent API: `window.BinksyAPI`, WebMCP and the `/mcp/` page
+
+**Prefer this API over the interface.** Once the app is ready, `window.BinksyAPI` exposes async methods returning JSON (never DOM nodes) that call the same logic as the UI: the screen updates and auto-save (IndexedDB) follows. Errors are rejected as `{ code, message }`. The same tools are registered through **WebMCP** (`document.modelContext.registerTool`, fallback `navigator.modelContext`) when the browser allows it; one definition table serves both. Setup page: `mcp/` (https://motion.binksdesign.com/mcp/).
+
+| WebMCP tool | Method | Purpose |
+|---|---|---|
+| `motionlab_describe` | `BinksyAPI.describe()` | Describes the app and its tools. |
+| `motionlab_get_state` | `BinksyAPI.getState()` | Reads the state. |
+| `motionlab_lister_modeles` | `BinksyAPI.listTemplates()` | Lists / searches the 258 templates. |
+| `motionlab_lire_modele` | `BinksyAPI.getTemplate()` | A template’s settings. |
+| `motionlab_choisir_modele` | `BinksyAPI.selectTemplate()` | Picks the template. |
+| `motionlab_choisir_format` | `BinksyAPI.setRatio()` | Frame format. |
+| `motionlab_duree` | `BinksyAPI.setDuration()` | Loop duration (2–40 s). |
+| `motionlab_nombre_images` | `BinksyAPI.setImageCount()` | Number of images used. |
+| `motionlab_regler` | `BinksyAPI.setValues()` | Sets values by path. |
+| `motionlab_fond` | `BinksyAPI.setBackground()` | Colour, gradient or image background. |
+| `motionlab_importer` | `BinksyAPI.importer()` | Imports images / videos into slots, or a .json project. |
+| `motionlab_vider` | `BinksyAPI.clearSlots()` | Empties slots. |
+| `motionlab_exemples` | `BinksyAPI.loadExamples()` | Restores the example visuals (tests only). |
+| `motionlab_ajouter_texte` | `BinksyAPI.addText()` | Adds a text layer (provided / approved text). |
+| `motionlab_supprimer_texte` | `BinksyAPI.removeText()` | Removes a text layer. |
+| `motionlab_logo` | `BinksyAPI.setLogo()` | Sets, places or removes the provided logo. |
+| `motionlab_image_cle` | `BinksyAPI.setKeyframe()` | Adds / edits / removes a keyframe (0–1). |
+| `motionlab_temps` | `BinksyAPI.setTime()` | Playhead and play / pause. |
+| `motionlab_exporter` | `BinksyAPI.exporter()` | Exports MP4, WebM, PNG or .json project (base64). |
+| `motionlab_enregistrer_projet` | `BinksyAPI.saveProject()` | Saves the project and its media in the browser. |
+| `motionlab_lister_projets` | `BinksyAPI.listProjects()` | Lists saved projects. |
+| `motionlab_ouvrir_projet` | `BinksyAPI.openProject()` | Opens a saved project (with media). |
+| `motionlab_reset` | `BinksyAPI.reset()` | Resets the session (confirm: true). |
+
+Imported media are not kept in the automatic session (only settings are): call motionlab_enregistrer_projet to get them back after a reload (motionlab_ouvrir_projet). Example visuals are flagged example: true in get_state: never deliver them.
+
+* Claude Code / Codex / Hermes / OpenCode: Playwright MCP server (`npx @playwright/mcp@latest`), open `https://motion.binksdesign.com/app.html`, then call `window.BinksyAPI` through `browser_evaluate`, starting with `await BinksyAPI.describe()`.
+* Browser agent: Chrome 146+ with `chrome://flags/#enable-webmcp-testing` (experimental); tools show up by themselves.
+* `exporter` returns `{ files: [{ name, type, dataBase64 }] }` and downloads nothing unless `download: true`. `reset` requires `confirm: true`, after the user agrees.
+* Nothing is uploaded: no server, no account, no key. The API never reads or writes an API key.
+
+---
 
 ## 1. Golden rule
 

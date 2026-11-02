@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MCP / Agents IA — Motion Lab</title>
+<meta name="description" content="Piloter Motion Lab avec un agent IA : window.BinksyAPI, outils WebMCP, Playwright MCP pour Claude Code, Codex, Hermes, OpenCode. Rien n’est envoyé, pas de compte, pas de clé.">
+<meta name="theme-color" content="#111111">
+<meta name="author" content="Binks Design">
+<meta property="og:title" content="MCP / Agents IA — Motion Lab">
+<meta property="og:description" content="Piloter Motion Lab avec un agent IA : window.BinksyAPI, outils WebMCP, Playwright MCP pour Claude Code, Codex, Hermes, OpenCode. Rien n’est envoyé, pas de compte, pas de clé.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111'/%3E%3Cg transform='translate%284 4%29'%3E%3Crect x='3.5' y='6' width='9' height='12' rx='2.2' fill='none' stroke='%23f2f2f0' stroke-width='2'/%3E%3Crect x='11.5' y='6' width='9' height='12' rx='2.2' fill='%23f2f2f0' transform='rotate%2812 16 12%29'/%3E%3Ccircle cx='18.6' cy='5.2' r='2' fill='%23ff5500'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="alternate" type="text/markdown" href="../AGENTS.md" title="Mode d’emploi pour agents IA (Markdown, FR puis EN)">
+<link rel="help" href="../agent/" title="Agents IA">
+<link rel="help" href="./" title="MCP / Agents IA">
+<link rel="alternate" type="text/plain" href="../llms.txt" title="llms.txt">
+<link rel="stylesheet" href="../assets/site.css">
+<script>if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&'IntersectionObserver' in window)document.documentElement.classList.add('anim');</script>
+<script src="../assets/site.js" defer></script>
+</head>
+<!-- Agents IA / AI agents : API JavaScript window.BinksyAPI (await BinksyAPI.describe()) et outils WebMCP dans l’application ; mode d’emploi complet : ../AGENTS.md. Aucune clé API, tout est local. -->
+<body>
+<a class="skip" href="#contenu">Aller au contenu</a>
+<noscript><p style="margin:0;padding:10px 18px;background:#ff5500;color:#0b0b0b;font:600 14px/1.4 sans-serif">Agents IA : le mode d’emploi complet est dans <a href="../AGENTS.md">AGENTS.md</a> (page HTML : <a href="../agent/index.html">agent/</a>). L’application (<a href="../app.html">app.html</a>) a besoin de JavaScript et de WebGL2.</p></noscript>
+<header class="top">
+  <a class="brand" href="../index.html" aria-label="Motion Lab — accueil"><span class="mk"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="6" width="9" height="12" rx="2.2" fill="none" stroke="#f2f2f0" stroke-width="2"/><rect x="11.5" y="6" width="9" height="12" rx="2.2" fill="#f2f2f0" transform="rotate(12 16 12)"/><circle cx="18.6" cy="5.2" r="2" fill="#ff5500"/></svg></span><b>Motion Lab</b></a>
+  <a class="sig" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">by binks design</a>
+  <nav class="nav" aria-label="Navigation principale">
+    <a href="../index.html">Accueil</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../agent/index.html">Agents IA</a>
+    <a href="./" aria-current="page">MCP</a>
+    <a class="cta" href="../app.html">Ouvrir l’app</a>
+  </nav>
+</header>
+<div class="sheet"><main id="contenu">
+  <div class="doc-hero">
+    <div class="plane" aria-hidden="true"></div>
+    <div class="in-w">
+      <p class="kicker"><i aria-hidden="true"></i>Pour Claude Code, Codex, Hermes, OpenCode et les agents du navigateur</p>
+      <h1 class="doc-h1"><span class="mask"><span>MCP &amp;</span></span><span class="mask"><span style="--i:1"><em>agents IA</em></span></span></h1>
+      <p class="lead">Importer les visuels de l’utilisateur, choisir un des 258 modèles, régler format, durée, fond, textes, logo et images clés, puis exporter en MP4, WebM ou PNG. L’app expose <code>window.BinksyAPI</code> et les mêmes outils en WebMCP : l’agent agit sans cliquer dans l’interface.</p>
+      <div class="meta lang-switch">
+        <a class="tag" href="#mcp-outils">Français</a>
+        <a class="tag" href="#mcp-en" hreflang="en">English</a>
+        <a class="tag" href="../agent/index.html">Mode d’emploi complet</a>
+        <a class="tag" href="../AGENTS.md" type="text/markdown">AGENTS.md</a>
+        <a class="tag" href="../llms.txt" type="text/plain">llms.txt</a>
+      </div>
+    </div>
+  </div>
+  <div class="in-w doc-grid">
+    <details class="toc" open>
+      <summary><span>Sommaire</span><span class="cur"></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <nav class="toc-body" aria-label="Sommaire"><span class="toc-h" lang="fr">Français</span><ol><li><a href="#mcp-outils"><span class="n">01</span><span>Ce que l’agent peut faire</span></a></li><li><a href="#mcp-webmcp"><span class="n">02</span><span>Connexion A — WebMCP</span></a></li><li><a href="#mcp-playwright"><span class="n">03</span><span>Connexion B — Claude Code, Codex…</span></a></li><li><a href="#mcp-prompt"><span class="n">04</span><span>Prompt prêt à copier</span></a></li><li><a href="#mcp-local"><span class="n">05</span><span>Rien n’est envoyé</span></a></li></ol><span class="toc-h" lang="en">English</span><ol><li><a href="#mcp-en"><span class="n">EN</span><span>Agent API (short)</span></a></li></ol></nav>
+    </details>
+    <article class="prose">
+<section id="mcp-outils" lang="fr"><h2><span class="n">01</span><span>Ce que l’agent peut faire</span></h2>
+<p>Une seule table de définitions (schémas JSON) sert à la fois <code>window.BinksyAPI</code> et les outils WebMCP. Toutes les méthodes sont asynchrones et renvoient du JSON ; une erreur est rejetée avec <code>{ code, message }</code>. Liste à jour : <code>await BinksyAPI.describe()</code>.</p>
+<div class="tbl"><table><thead><tr><th>Outil WebMCP</th><th>Méthode</th><th>Ce qu’il fait</th></tr></thead><tbody><tr><td><code>motionlab_describe</code></td><td><code>BinksyAPI.describe()</code></td><td>Décrit l’app et la liste des outils.</td></tr><tr><td><code>motionlab_get_state</code></td><td><code>BinksyAPI.getState()</code></td><td>Lit l’état : modèle, format, durée, emplacements, fond, textes, logo, images clés.</td></tr><tr><td><code>motionlab_lister_modeles</code></td><td><code>BinksyAPI.listTemplates()</code></td><td>Liste / cherche les 258 modèles.</td></tr><tr><td><code>motionlab_lire_modele</code></td><td><code>BinksyAPI.getTemplate()</code></td><td>Réglages d’un modèle (chemins, bornes, options).</td></tr><tr><td><code>motionlab_choisir_modele</code></td><td><code>BinksyAPI.selectTemplate()</code></td><td>Choisit le modèle.</td></tr><tr><td><code>motionlab_choisir_format</code></td><td><code>BinksyAPI.setRatio()</code></td><td>Format du cadre (16:9, 4:3, 1:1, 4:5, 3:4, 9:16).</td></tr><tr><td><code>motionlab_duree</code></td><td><code>BinksyAPI.setDuration()</code></td><td>Durée de la boucle (2 à 40 s).</td></tr><tr><td><code>motionlab_nombre_images</code></td><td><code>BinksyAPI.setImageCount()</code></td><td>Nombre d’images utilisées par le modèle.</td></tr><tr><td><code>motionlab_regler</code></td><td><code>BinksyAPI.setValues()</code></td><td>Règle des valeurs par chemin (tp.…, bg.…, logo.…, tx.…).</td></tr><tr><td><code>motionlab_fond</code></td><td><code>BinksyAPI.setBackground()</code></td><td>Fond couleur, dégradé ou image fournie.</td></tr><tr><td><code>motionlab_importer</code></td><td><code>BinksyAPI.importer()</code></td><td>Importe images / vidéos dans les emplacements, ou un projet .json.</td></tr><tr><td><code>motionlab_vider</code></td><td><code>BinksyAPI.clearSlots()</code></td><td>Vide des emplacements.</td></tr><tr><td><code>motionlab_exemples</code></td><td><code>BinksyAPI.loadExamples()</code></td><td>Remet les visuels d’exemple (tests seulement).</td></tr><tr><td><code>motionlab_ajouter_texte</code></td><td><code>BinksyAPI.addText()</code></td><td>Ajoute un calque texte (texte fourni / validé).</td></tr><tr><td><code>motionlab_supprimer_texte</code></td><td><code>BinksyAPI.removeText()</code></td><td>Supprime un calque texte.</td></tr><tr><td><code>motionlab_logo</code></td><td><code>BinksyAPI.setLogo()</code></td><td>Pose, place, règle ou retire le logo fourni.</td></tr><tr><td><code>motionlab_image_cle</code></td><td><code>BinksyAPI.setKeyframe()</code></td><td>Pose / modifie / retire une image clé à un instant (0–1).</td></tr><tr><td><code>motionlab_temps</code></td><td><code>BinksyAPI.setTime()</code></td><td>Tête de lecture et lecture / pause.</td></tr><tr><td><code>motionlab_exporter</code></td><td><code>BinksyAPI.exporter()</code></td><td>Exporte MP4, WebM, PNG ou projet .json (base64).</td></tr><tr><td><code>motionlab_enregistrer_projet</code></td><td><code>BinksyAPI.saveProject()</code></td><td>Enregistre le projet et ses médias dans le navigateur.</td></tr><tr><td><code>motionlab_lister_projets</code></td><td><code>BinksyAPI.listProjects()</code></td><td>Liste les projets enregistrés.</td></tr><tr><td><code>motionlab_ouvrir_projet</code></td><td><code>BinksyAPI.openProject()</code></td><td>Ouvre un projet enregistré (avec ses médias).</td></tr><tr><td><code>motionlab_reset</code></td><td><code>BinksyAPI.reset()</code></td><td>Remet la session par défaut (confirm: true après accord).</td></tr></tbody></table></div>
+<p>Les médias importés ne sont pas gardés dans la session automatique (seuls les réglages le sont) : appelle <code>motionlab_enregistrer_projet</code> pour les retrouver au rechargement (<code>motionlab_ouvrir_projet</code>). Les visuels d’exemple sont marqués <code>example: true</code> dans <code>get_state</code> : ne les livre jamais.</p>
+</section>
+<section id="mcp-webmcp" lang="fr"><h2><span class="n">02</span><span>Connexion A — agent intégré au navigateur (WebMCP)</span></h2>
+<p>WebMCP est une proposition de standard encore expérimentale. Dans un Chrome récent (146 ou plus), active le drapeau <code>chrome://flags/#enable-webmcp-testing</code>, relance Chrome, puis ouvre <a href="https://motion.binksdesign.com/app.html">https://motion.binksdesign.com/app.html</a>. Les outils ci-dessus s’enregistrent tout seuls (<code>document.modelContext.registerTool</code>, avec repli sur les premières formes <code>navigator.modelContext</code> / <code>provideContext</code>) et l’agent du navigateur ou une extension compatible les voit. L’API évolue : en cas de doute, vérifie la documentation Chrome for Developers. Sans WebMCP, rien ne change : <code>window.BinksyAPI</code> reste disponible.</p>
+</section>
+<section id="mcp-playwright" lang="fr"><h2><span class="n">03</span><span>Connexion B — Claude Code, Codex, Hermes, OpenCode</span></h2>
+<p>Ces agents pilotent un navigateur local via un serveur MCP standard : <strong>Playwright MCP</strong>. Ajoute-le à la configuration MCP de ton agent :</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;playwright&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [
+        &quot;@playwright/mcp@latest&quot;
+      ]
+    }
+  }
+}</code></pre>
+<p>(Claude Code : <code>claude mcp add playwright npx @playwright/mcp@latest</code>.) Demande ensuite à l’agent d’ouvrir <code>https://motion.binksdesign.com/app.html</code> et d’appeler <code>window.BinksyAPI</code> avec l’outil d’évaluation JavaScript (<code>browser_evaluate</code>). Exemples :</p>
+<h3>Découvrir les outils</h3><pre><code>await BinksyAPI.ready();
+(await BinksyAPI.describe()).tools.map(t =&gt; t.name);</code></pre><h3>Importer les visuels fournis (base64) et choisir un modèle</h3><pre><code>await BinksyAPI.importer({ clearFirst: true, files: [
+  { name: &quot;visuel-01.jpg&quot;, type: &quot;image/jpeg&quot;, dataBase64: &quot;&lt;base64 du fichier fourni&gt;&quot; },
+  { name: &quot;visuel-02.jpg&quot;, type: &quot;image/jpeg&quot;, dataBase64: &quot;&lt;base64&gt;&quot; }
+] });
+await BinksyAPI.setRatio({ ratio: &quot;9:16&quot; });
+await BinksyAPI.selectTemplate({ id: &quot;cover-flow&quot; });
+await BinksyAPI.setDuration({ seconds: 10 });</code></pre><h3>Exporter la vidéo MP4 1080p et garder le projet</h3><pre><code>const { files } = await BinksyAPI.exporter({ format: &quot;mp4&quot;, resolution: 1080, fps: 30 });
+files[0].name; // sans-titre.mp4, dataBase64 = la vidéo
+await BinksyAPI.saveProject({ name: &quot;&lt;nom donné par l’utilisateur&gt;&quot; });</code></pre>
+</section>
+<section id="mcp-prompt" lang="fr"><h2><span class="n">04</span><span>Prompt prêt à copier</span></h2>
+<pre><code>Ouvre https://motion.binksdesign.com/app.html avec le navigateur (Playwright MCP). Attends await window.BinksyAPI.ready(), lis await BinksyAPI.describe(), puis utilise uniquement window.BinksyAPI (via browser_evaluate) : vide les emplacements, importe les visuels que je te donne (base64), propose-moi 3 modèles adaptés à un Reel 9:16 de 10 s, et après mon choix exporte la vidéo MP4 1080p. N’invente aucun texte, logo ni couleur ; rien ne doit être envoyé en ligne.</code></pre>
+</section>
+<section id="mcp-local" lang="fr"><h2><span class="n">05</span><span>Rien n’est envoyé</span></h2>
+<ul><li>Tout se passe dans l’onglet : aucun serveur, aucune base de données, aucune requête réseau ajoutée. Tes fichiers ne quittent jamais le navigateur.</li><li>Pas de compte, pas de clé API : l’API n’en lit ni n’en écrit aucune.</li><li>Chaque action passe par la même logique que l’interface : l’écran se met à jour et l’enregistrement automatique (IndexedDB) garde tout au rechargement.</li><li>L’agent ne doit jamais inventer de logo, de couleur ou de nom de client : il manipule ce que l’utilisateur fournit.</li></ul>
+</section>
+<section id="mcp-en" lang="en"><h2><span class="n">EN</span><span>Agent API (short)</span></h2>
+<p>Import the user’s visuals, pick one of 258 templates, set format, duration, background, texts, logo and keyframes, then export MP4, WebM or PNG. The app exposes <code>window.BinksyAPI</code> (async methods, JSON results, errors rejected as <code>{ code, message }</code>) and registers the same tools through WebMCP when the browser supports it (Chrome 146+ with <code>chrome://flags/#enable-webmcp-testing</code>; still experimental).</p>
+<ul><li><code>motionlab_describe</code> (<code>BinksyAPI.describe</code>) — Describes the app and its tools.</li><li><code>motionlab_get_state</code> (<code>BinksyAPI.getState</code>) — Reads the state.</li><li><code>motionlab_lister_modeles</code> (<code>BinksyAPI.listTemplates</code>) — Lists / searches the 258 templates.</li><li><code>motionlab_lire_modele</code> (<code>BinksyAPI.getTemplate</code>) — A template’s settings.</li><li><code>motionlab_choisir_modele</code> (<code>BinksyAPI.selectTemplate</code>) — Picks the template.</li><li><code>motionlab_choisir_format</code> (<code>BinksyAPI.setRatio</code>) — Frame format.</li><li><code>motionlab_duree</code> (<code>BinksyAPI.setDuration</code>) — Loop duration (2–40 s).</li><li><code>motionlab_nombre_images</code> (<code>BinksyAPI.setImageCount</code>) — Number of images used.</li><li><code>motionlab_regler</code> (<code>BinksyAPI.setValues</code>) — Sets values by path.</li><li><code>motionlab_fond</code> (<code>BinksyAPI.setBackground</code>) — Colour, gradient or image background.</li><li><code>motionlab_importer</code> (<code>BinksyAPI.importer</code>) — Imports images / videos into slots, or a .json project.</li><li><code>motionlab_vider</code> (<code>BinksyAPI.clearSlots</code>) — Empties slots.</li><li><code>motionlab_exemples</code> (<code>BinksyAPI.loadExamples</code>) — Restores the example visuals (tests only).</li><li><code>motionlab_ajouter_texte</code> (<code>BinksyAPI.addText</code>) — Adds a text layer (provided / approved text).</li><li><code>motionlab_supprimer_texte</code> (<code>BinksyAPI.removeText</code>) — Removes a text layer.</li><li><code>motionlab_logo</code> (<code>BinksyAPI.setLogo</code>) — Sets, places or removes the provided logo.</li><li><code>motionlab_image_cle</code> (<code>BinksyAPI.setKeyframe</code>) — Adds / edits / removes a keyframe (0–1).</li><li><code>motionlab_temps</code> (<code>BinksyAPI.setTime</code>) — Playhead and play / pause.</li><li><code>motionlab_exporter</code> (<code>BinksyAPI.exporter</code>) — Exports MP4, WebM, PNG or .json project (base64).</li><li><code>motionlab_enregistrer_projet</code> (<code>BinksyAPI.saveProject</code>) — Saves the project and its media in the browser.</li><li><code>motionlab_lister_projets</code> (<code>BinksyAPI.listProjects</code>) — Lists saved projects.</li><li><code>motionlab_ouvrir_projet</code> (<code>BinksyAPI.openProject</code>) — Opens a saved project (with media).</li><li><code>motionlab_reset</code> (<code>BinksyAPI.reset</code>) — Resets the session (confirm: true).</li></ul>
+<p>Claude Code / Codex / Hermes / OpenCode: add Playwright MCP (<code>npx @playwright/mcp@latest</code>, config above), open <code>https://motion.binksdesign.com/app.html</code>, then call <code>window.BinksyAPI</code> through <code>browser_evaluate</code>, starting with <code>await BinksyAPI.describe()</code>.</p>
+<pre><code>Open https://motion.binksdesign.com/app.html (Playwright MCP). Wait for await window.BinksyAPI.ready(), read await BinksyAPI.describe(), then only use window.BinksyAPI via browser_evaluate: import the visuals I give you, suggest 3 templates for a 10 s 9:16 Reel, and export the one I pick as MP4 1080p. Never invent text, logo or colours.</code></pre>
+<p>Nothing is uploaded: no server, no account, no API key. State stays in IndexedDB in the browser.</p>
+</section>
+    </article>
+  </div>
+</main>
+<footer class="foot doc-foot">
+  <div class="in-w foot-in">
+    <span class="foot-l"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="6" width="9" height="12" rx="2.2" fill="none" stroke="#111" stroke-width="2"/><rect x="11.5" y="6" width="9" height="12" rx="2.2" fill="#111" transform="rotate(12 16 12)"/><circle cx="18.6" cy="5.2" r="2" fill="#ff5500"/></svg>Motion Lab · by binks design</span>
+    <ul class="foot-r">
+      <li><a href="../docs.html">Documentation</a></li>
+      <li><a href="../agent/index.html">Agents IA</a></li>
+      <li><a href="./">MCP / Agents IA</a></li>
+      <li><a href="mailto:graphistedubinks@gmail.com">graphistedubinks@gmail.com</a></li>
+      <li><a class="pillk" href="https://www.instagram.com/graphiste.binks/" target="_blank" rel="noopener">Instagram @graphiste.binks</a></li>
+    </ul>
+    <small>Gratuit, sans compte, tout est calculé dans ton navigateur. Polices de ces pages : Clash Display (<a href="../assets/fonts/ClashDisplay-FFL.txt">licence FFL</a>) et Instrument Sans (<a href="../assets/fonts/InstrumentSans-OFL.txt">licence OFL</a>). Visuels d’exemple de l’app et des captures : Binks Design.</small>
+  </div>
+</footer>
+</div>
+</body>
+</html>

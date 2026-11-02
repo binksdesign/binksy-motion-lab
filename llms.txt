@@ -3,7 +3,7 @@
 > Éditeur de modèles d'animation 100 % navigateur, par Binks Design. Il met des images ou des vidéos fournies par l'utilisateur dans l'un des 258 modèles (anneaux 3D, carrousels, grilles, decks, showreels…), en 16:9, 4:3, 1:1, 4:5, 3:4 ou 9:16, avec fond, textes, logo et images clés, et exporte une boucle parfaite en MP4 ou WebM (1080p, 4K, 8K selon la machine) ou une image PNG. Aucune clé API, aucun compte, rien n'est envoyé à un serveur.
 > Browser-only motion-template editor by Binks Design. It puts user-provided images or videos into one of 258 templates (3D rings, carousels, grids, decks, showreels…), in 16:9, 4:3, 1:1, 4:5, 3:4 or 9:16, with background, texts, logo and keyframes, and exports a seamless loop as MP4 or WebM (1080p, 4K, 8K when supported) or a PNG still. No API key, no account, nothing is uploaded.
 
-There is NO public JavaScript API. AI agents (Claude Code, Codex…) drive app.html through its interface with stable selectors: #clearAll, #fileIn, #ratios [data-r], #lib .tpl[data-id], #pane-style [data-p], #addText, .kbtn[data-k], #exportBtn, #dialog [data-o][data-v], #xGo. Wait for window.ML_READY === true. window.ML is an internal test object: read-only checks only.
+AI agents (Claude Code, Codex, Hermes, OpenCode, browser agents) should use window.BinksyAPI in app.html: async JSON methods listed by await BinksyAPI.describe() (importer, listTemplates, selectTemplate, setRatio, setDuration, setValues, setBackground, addText, setLogo, setKeyframe, exporter → { files: [{ name, type, dataBase64 }] }, saveProject, openProject…), also registered as WebMCP tools (motionlab_*) when the browser supports it; setup page: mcp/. Wait for window.ML_READY === true. The interface can still be driven with stable selectors (#fileIn, #ratios [data-r], #lib .tpl[data-id], #exportBtn, #xGo…). window.ML is an internal test object: read-only checks only.
 Serve the folder over http (python3 -m http.server) and open app.html?fresh. Needs WebGL2; frame-by-frame video export needs WebCodecs.
 
 Golden rule: animate the user's own visuals; never invent a logo, image, colour or brand copy, and never deliver the built-in example visuals or example logo.
@@ -11,6 +11,7 @@ Golden rule: animate the user's own visuals; never invent a logo, image, colour 
 ## Docs
 
 - [AGENTS.md](AGENTS.md): full guide for AI agents (Markdown, French then English)
+- [mcp/](mcp/index.html): agent API page (window.BinksyAPI, WebMCP tools, Playwright MCP setup for Claude Code / Codex / Hermes / OpenCode)
 - [agent/index.html](agent/index.html): same guide as an HTML page
 - [docs.html](docs.html): human documentation (French)
 
